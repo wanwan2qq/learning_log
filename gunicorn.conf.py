@@ -9,7 +9,7 @@ from logging.handlers import WatchedFileHandler
 import multiprocessing
  
 
-BASE_DIR = '/Users/zhoupeijun/Documents/Python/PythonCC/learning_log/'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
  
 LOG_DIR = os.path.join(BASE_DIR, 'log')
