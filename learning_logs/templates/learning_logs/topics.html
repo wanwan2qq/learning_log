@@ -1,7 +1,7 @@
 {% extends "learning_logs/base.html" %}
 
 {% block header %}
-    <h2>Topics</h2>
+    <h2>主题</h2>
 {% endblock header %}
 
 {% block content %}
@@ -14,12 +14,12 @@
                 </h3>
             </li>
         {% empty %}
-            <li>No topics have been added yet.</li>
+            <li>还未添加主题</li>
         {% endfor %}
     </ul>
 
     <h3>
-        <a href="{% url 'learning_logs:new_topic' %}">Add a new topic:</a>
+        <a href="{% url 'learning_logs:new_topic' %}">添加主题:</a>
     </h3>
 
 {% endblock content %}

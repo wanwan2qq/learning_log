@@ -7,7 +7,7 @@
 {% block content %}
 
     <p>
-        <a href="{% url 'learning_logs:new_entry' topic.id %}">add new entry</a>
+        <a href="{% url 'learning_logs:new_entry' topic.id %}">增加日志</a>
     </p>
     
     {% for entry in entries %}
@@ -17,7 +17,7 @@
                 <h3>
                     {{ entry.date_added|date:'M d, Y H:i' }}
                     <small>
-                        <a href="{% url 'learning_logs:edit_entry' entry.id %}">edit entry</a>
+                        <a href="{% url 'learning_logs:edit_entry' entry.id %}">修改</a>
                     </small>
                 </h3>
             </div>
@@ -26,7 +26,7 @@
             </div> 
         </div><!-- panel -->
     {% empty %}
-            There are no entries for this topic yet.
+            该主题还未添加日志
     {% endfor %}
 
 {% endblock content %}

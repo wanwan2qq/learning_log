@@ -2,17 +2,21 @@
 
 {% block header %}
     <div class="jumbotron">
-        <h1>Track your learning.</h1>
+        <h1>记录你的学习轨迹</h1>
     </div>
 {% endblock header %}
 
 {% block content %}
-    <h2>
-        <a href="{% url 'users:register' %}">Register an account</a> to make your own
-        Learning Log, and list the topics you're learning about.
-    </h2>
-    <h2>
-        Wheneven you learn something new about a topic, make an entry summarizing
-        what you've learning.
-    </h2>
+    {% if user.is_authenticated %}
+        <h3><a href="{% url 'learning_logs:topics' %}">进入主题</a></h3>
+    {% else %}
+        <h3>
+            <a href="{% url 'users:register' %}">注册一个账号</a> 记录你自己的学习日志，
+                展示你学习中感兴趣的主题。
+        </h3>
+        <h3>
+            随时随地记录你感兴趣的学习主题，把学习经验记录下来吧！
+        </h3>
+    {% endif %}
+
 {% endblock content %}
