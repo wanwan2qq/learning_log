@@ -22,4 +22,7 @@ urlpatterns = [
 
     # 用于编辑条目的页面
     path('edit_entry/<entry_id>', views.edit_entry, name='edit_entry'),
+
+    # 用于查看条目的页面
+    path('see_entry/<entry_id>', views.see_entry, name='see_entry'),
 ]

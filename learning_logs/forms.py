@@ -1,6 +1,7 @@
 from django import forms
 
 from .models import Topic, Entry
+from mdeditor.fields import MDTextFormField
 
 class TopicForm(forms.ModelForm):
     class Meta:
@@ -13,4 +14,4 @@ class EntryForm(forms.ModelForm):
         model = Entry
         fields = ['text']
         labels = {'text': ''}
-        widgets = {'text': forms.Textarea(attrs={'cols': 80})}
+        widgets = {'text': MDTextFormField}

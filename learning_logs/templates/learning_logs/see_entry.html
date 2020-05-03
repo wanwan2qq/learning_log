@@ -1,0 +1,16 @@
+{% extends "learning_logs/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block header %}
+    <h2><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
+    <h4>记录时间 {{ time }}</h4>
+{% endblock header %}
+
+{% block content %}
+
+    <div class="panel-body">
+        {{ entry|safe }}
+    </div> 
+
+{% endblock content %}

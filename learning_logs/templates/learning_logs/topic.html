@@ -19,10 +19,17 @@
                     <small>
                         <a href="{% url 'learning_logs:edit_entry' entry.id %}">修改</a>
                     </small>
+                    <small>
+                        <a href="{% url 'learning_logs:see_entry' entry.id %}">查看</a>
+                    </small>
                 </h3>
             </div>
             <div class="panel-body">
-                {{ entry.text|linebreaks }}
+                {% if entry.text|length > 100 %}
+                    {{ entry.text|linebreaks|slice:":100" }} ......
+                {% else %}
+                    {{ entry.text|linebreaks }}
+                {% endif %}
             </div> 
         </div><!-- panel -->
     {% empty %}
