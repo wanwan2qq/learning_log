@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
-# 尝试将md格式转换成html
-from markdown import markdown
-import mistune
+# 尝试将md格式转换成html - 后台转换，有些格式有问题，暂时不用
+# from markdown import markdown
+# import mistune
 
 # Create your views here.
 def index(request):
@@ -102,14 +102,10 @@ def edit_entry(request, entry_id):
 @login_required
 def see_entry(request, entry_id):
     """查看既有条目"""
-    entry = markdown(Entry.objects.get(id=entry_id).text, extensions=[
-                                     'markdown.extensions.extra',
-                                     'markdown.extensions.codehilite',
-                                     'markdown.extensions.toc',
-                                  ])
+    entry = Entry.objects.get(id=entry_id).text
     topic = Entry.objects.get(id=entry_id).topic
     time = Entry.objects.get(id=entry_id).date_added
     # 确认请求的主题属于当前用户
     check_topic_owner(request, topic)
     context = {'entry': entry, 'topic': topic, 'time': time}
-    return render(request, 'learning_logs/see_entry.html', context)
+    return render(request, 'learning_logs/see_entry_front.html', context)

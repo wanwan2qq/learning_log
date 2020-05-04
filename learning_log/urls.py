@@ -18,24 +18,12 @@ from django.urls import include, path
 
 from . import settings
 
-# 解决admin样式加载不出来问题
-# from django.conf import settings
-from django.conf.urls.static import static
-
 
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')), # Django JET URLS
     path('admin/', admin.site.urls),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('', include(('learning_logs.urls', 'learning_logs'), namespace='learning_logs')),
-    path('mdeditor/', include(('mdeditor.urls', 'mdeditor'), namespace='mdeditor'))
+    path('mdeditor/', include(('mdeditor.urls', 'mdeditor'), namespace='mdeditor')),
 
-    # 静态文件收集后，admin的静态文件从项目的STATIC_ROOT指向目录下读取
-    # path(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    # path(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
 ]
-
-if settings.DEBUG:
-# static files (images, css, javascript, etc.)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
