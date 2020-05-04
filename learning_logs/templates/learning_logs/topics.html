@@ -6,17 +6,16 @@
 
 {% block content %}
 
-    <ul>
+    <div class="list-group list-group-flush">
         {% for topic in topics %}
-            <li>
-                <h3>
-                    <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
-                </h3>
-            </li>
+            <a href="{% url 'learning_logs:topic' topic.id %}" class="list-group-item">
+                <span class="badge">{{ topic.entries_num }}</span>
+                <h4>{{ topic.text|title }}</h4>
+            </a>
         {% empty %}
-            <li>还未添加主题</li>
+            <a>还未添加主题</a>
         {% endfor %}
-    </ul>
+    </div>
 
     <h3>
         <a href="{% url 'learning_logs:new_topic' %}">添加主题</a>

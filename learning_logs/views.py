@@ -7,13 +7,20 @@ from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
 
 # 尝试将md格式转换成html - 后台转换，有些格式有问题，暂时不用
-# from markdown import markdown
+from markdown import markdown
 # import mistune
 
 # Create your views here.
 def index(request):
     """学习笔记的主页"""
-    return render(request, 'learning_logs/index.html')
+    try:
+        topics = Topic.objects.filter(owner=request.user)
+    except TypeError:
+        context = {}
+    else:
+        entries = Entry.objects.filter(topic__in=topics).order_by('-date_added')[:5]
+        context = {'entries': entries}
+    return render(request, 'learning_logs/index.html', context)
 
 def check_topic_owner(request, topic):
     """确认请求的主题属于当前用户"""
@@ -24,7 +31,11 @@ def check_topic_owner(request, topic):
 def topics(request):
     """显示所有的主题"""
     topics = Topic.objects.filter(owner=request.user).order_by('date_added')
-    context = {'topics': topics}
+    topics_v = topics.values()
+    for topic in topics_v:
+        entries = Entry.objects.filter(topic=topic['id'])
+        topic['entries_num'] = len(list(entries))
+    context = {'topics': topics_v}
     return render(request, 'learning_logs/topics.html', context)
 
 @login_required

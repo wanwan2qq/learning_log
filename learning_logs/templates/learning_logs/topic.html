@@ -1,6 +1,7 @@
 {% extends 'learning_logs/base.html' %}
 
 {% block header %}
+    <h4><a href="{% url 'learning_logs:topics' %}">返回主题</a></h4>
     <h2>{{ topic }}</h2>
 {% endblock header %}
 
@@ -14,15 +15,9 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3>
-                    {{ entry.date_added|date:'M d, Y H:i' }}
-                    <small>
-                        <a href="{% url 'learning_logs:edit_entry' entry.id %}">修改</a>
-                    </small>
-                    <small>
-                        <a href="{% url 'learning_logs:see_entry' entry.id %}">查看</a>
-                    </small>
-                </h3>
+                <h4>{{ entry.date_added|date:'M d, Y H:i' }}</h4>
+                <small><a href="{% url 'learning_logs:edit_entry' entry.id %}">修改</a></small>
+                <small><a href="{% url 'learning_logs:see_entry' entry.id %}">查看</a></small>
             </div>
             <div class="panel-body">
                 {% if entry.text|length > 100 %}
