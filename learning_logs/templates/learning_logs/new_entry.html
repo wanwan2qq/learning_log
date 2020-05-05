@@ -10,8 +10,13 @@
     <h3>添加一个新日志：</h3>
     <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
         {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
+        <span class="hidden-xs">
+            {{ form.media }}
+            {{ form.as_p }}
+        </span>
+        <span class="visible-xs-block">
+            {% bootstrap_form form %}
+        </span>
         <!-- {% bootstrap_form form %} -->
 
         {% buttons %}
