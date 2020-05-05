@@ -114,9 +114,10 @@ def edit_entry(request, entry_id):
 def see_entry(request, entry_id):
     """查看既有条目"""
     entry = Entry.objects.get(id=entry_id).text
+    entry_id = Entry.objects.get(id=entry_id).id
     topic = Entry.objects.get(id=entry_id).topic
     time = Entry.objects.get(id=entry_id).date_added
     # 确认请求的主题属于当前用户
     check_topic_owner(request, topic)
-    context = {'entry': entry, 'topic': topic, 'time': time}
+    context = {'entry': entry, 'topic': topic, 'time': time, 'entry_id': entry_id}
     return render(request, 'learning_logs/see_entry_front.html', context)

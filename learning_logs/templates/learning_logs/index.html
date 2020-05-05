@@ -15,16 +15,16 @@
                 <div class="panel-heading">
                     <h4><a href="{% url 'learning_logs:topic' entry.topic.id %}">{{ entry.topic|title }}</a>
                         {{ entry.date_added|date:'M d, Y H:i' }}</h4>
-                    <small><a href="{% url 'learning_logs:edit_entry' entry.id %}">修改</a></small>
-                    <small><a href="{% url 'learning_logs:see_entry' entry.id %}">查看</a></small>
                 </div>
-                <div class="panel-body">
-                    {% if entry.text|length > 100 %}
-                        {{ entry.text|linebreaks|slice:":100" }} ......
-                    {% else %}
-                        {{ entry.text|linebreaks }}
-                    {% endif %}
-                </div> 
+                <a href="{% url 'learning_logs:see_entry' entry.id %}" style="color: #333; text-decoration: none;">
+                    <div class="panel-body">
+                        {% if entry.text|length > 100 %}
+                            {{ entry.text|linebreaks|slice:":100" }} ......
+                        {% else %}
+                            {{ entry.text|linebreaks }}
+                        {% endif %}
+                    </div> 
+                </a>
             </div><!-- panel -->
         {% empty %}
                 还未添加日志

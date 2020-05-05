@@ -6,7 +6,9 @@
     <link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet"> 
 
     <h2><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
-    <h4>记录时间 {{ time }}</h4>
+    <h4>记录时间 {{ time }}
+        <small><a href="{% url 'learning_logs:edit_entry' entry_id %}">修改</a></small>
+    </h4>
 {% endblock header %}
 
 {% block content %}
