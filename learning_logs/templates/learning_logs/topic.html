@@ -17,7 +17,8 @@
             <div class="panel-heading">
                 <h4>{{ entry.date_added|date:'M d, Y H:i' }}</h4>
             </div>
-            <a href="{% url 'learning_logs:see_entry' entry.id %}" style="color: #333; text-decoration: none;">
+            <a href="{% url 'learning_logs:see_entry' entry.id %}" 
+                style="color: #333; text-decoration: none;">
             <div class="panel-body" >
                 {% if entry.text|length > 100 %}
                     {{ entry.text|linebreaks|slice:":100" }} ......

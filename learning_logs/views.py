@@ -66,13 +66,26 @@ def new_topic(request):
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
 
+def check_agents_mobile_or_pc(request):
+    USER_AGENT = request.META["HTTP_USER_AGENT"]
+    agents = ["Android", "iPhone",
+            "SymbianOS", "Windows Phone",
+            "iPad", "iPod"]
+    flag = True
+    for agent in agents:
+        if agent in USER_AGENT:
+            flag = False
+            break
+    return(flag)
+
 @login_required
 def new_entry(request, topic_id):
     """在特定的主题中添加新条目"""
     topic = Topic.objects.get(id=topic_id)
     # 修改的条目关联的主题不是登录用户时，禁止访问
     check_topic_owner(request, topic)
-
+    # 判断客户端是移动端还是PC端
+    flag = check_agents_mobile_or_pc(request)
     if request.method != 'POST':
         # 未提交数据，创建一个空表单
         form = EntryForm()
@@ -86,7 +99,7 @@ def new_entry(request, topic_id):
             return HttpResponseRedirect(reverse('learning_logs:topic', 
                 args=[topic_id]))
 
-    context = {'topic': topic, 'form': form}
+    context = {'topic': topic, 'form': form, 'flag': flag}
     return render(request, 'learning_logs/new_entry.html', context)
 
 @login_required
@@ -96,6 +109,8 @@ def edit_entry(request, entry_id):
     topic = entry.topic
     # 确认请求的主题属于当前用户
     check_topic_owner(request, topic)
+    # 判断客户端是移动端还是PC端
+    flag = check_agents_mobile_or_pc(request)
     if request.method != 'POST':
         # 初次请求，使用当前条目填充表单
         form = EntryForm(instance=entry)
@@ -106,8 +121,7 @@ def edit_entry(request, entry_id):
             form.save()
             return HttpResponseRedirect(reverse('learning_logs:topic',
                 args=[topic.id]))
-
-    context = {'entry': entry, 'topic': topic, 'form': form}
+    context = {'entry': entry, 'topic': topic, 'form': form, 'flag': flag}
     return render(request, 'learning_logs/edit_entry.html', context)
 
 @login_required
