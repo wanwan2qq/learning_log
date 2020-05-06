@@ -10,7 +10,7 @@
     <h3>添加一个新日志：</h3>
     <form action="{% url 'learning_logs:new_entry' topic.id %}" method="post">
         {% csrf_token %}
-        
+
         {% if flag %}
             {{ form.media }}
             {{ form.as_p }}
@@ -19,7 +19,7 @@
         {% endif %}
 
         {% buttons %}
-            <button name='submit' class="btn btn-primary">新增</button>
+            <button name='submit' class="btn btn-primary">保存</button>
         {% endbuttons %}
     </form>
 

@@ -156,7 +156,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 # MD配置
 MDEDITOR_CONFIGS = {
 'default':{
-    'width': '90%',  # 自定义编辑框宽度
+    'width': '100%',  # 自定义编辑框宽度
     'heigth': 500,   # 自定义编辑框高度
     'toolbar': ["undo", "redo", "|",
                 "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime",
@@ -175,7 +175,7 @@ MDEDITOR_CONFIGS = {
     'flow_chart': True,  # 是否开启流程图功能
     'sequence': True,  # 是否开启序列图功能
     'watch': False,  # 实时预览
-    'lineWrapping': False,  # 自动换行
-    'lineNumbers': False  # 行号
+    'lineWrapping': True,  # 自动换行
+    'lineNumbers': True  # 行号
     }
 }
