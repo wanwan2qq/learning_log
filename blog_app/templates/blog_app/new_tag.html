@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+<div class="page-header">
+    <h2>增加标签</h2>
+    <h4 class="cl-effect-11"><a href="{% url 'blog_app:new_post' %}">返回</a></h4>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <form action="{% url 'blog_app:new_tag' %}" method="post" class="form-group">
+        {% csrf_token %}
+
+        {% if flag %}
+            {{ form.media }}
+            {{ form.as_p }}
+        {% else %}
+            {% bootstrap_form form %}
+        {% endif %}
+
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+        {% endbuttons %}
+        
+    </form>
+
+{% endblock content %}

@@ -1,7 +1,9 @@
-{% extends "learning_logs/base.html" %}
+{% extends "base.html" %}
 
 {% block header %}
+<div class="page-header">
     <h2>主题</h2>
+</div>
 {% endblock header %}
 
 {% block content %}
@@ -17,7 +19,7 @@
         {% endfor %}
     </div>
 
-    <h3>
+    <h3 class="cl-effect-11">
         <a href="{% url 'learning_logs:new_topic' %}">添加主题</a>
     </h3>
 

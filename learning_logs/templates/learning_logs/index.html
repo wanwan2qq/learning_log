@@ -1,19 +1,21 @@
-{% extends "learning_logs/base.html" %}
+{% extends "base.html" %}
 
 {% block header %}
+<div class="page-header">
     <div class="jumbotron">
         <h1>记录你的学习轨迹</h1>
     </div>
+</div>
 {% endblock header %}
 
 {% block content %}
     {% if user.is_authenticated %}
-        <h3><a href="{% url 'learning_logs:topics' %}">进入主题</a></h3>
+        <h3 class=cl-effect-11><a href="{% url 'learning_logs:topics' %}">进入主题</a></h3>
 
         {% for entry in entries %}
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4><a href="{% url 'learning_logs:topic' entry.topic.id %}">{{ entry.topic|title }}</a>
+                    <h4 class=cl-effect-11><a href="{% url 'learning_logs:topic' entry.topic.id %}">{{ entry.topic|title }}</a>
                         {{ entry.date_added|date:'M d, Y H:i' }}</h4>
                 </div>
                 <a href="{% url 'learning_logs:see_entry' entry.id %}" style="color: #333; text-decoration: none;">

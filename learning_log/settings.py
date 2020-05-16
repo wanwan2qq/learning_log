@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')6=0$revn(=qz1ail_1m9v-8qsi*e2n2*!5^8(y(jnfd!o6h9l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,10 +42,15 @@ INSTALLED_APPS = [
     # 第三方应用程序
     'bootstrap3',
     'mdeditor',
+    'pure_pagination',  # 分页
+    'haystack',  # 搜索引擎
 
     # My apps
     'learning_logs',
     'users',
+    'blog_app.apps.BlogAppConfig',
+    'comments.apps.CommentsConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -179,3 +184,20 @@ MDEDITOR_CONFIGS = {
     'lineNumbers': True  # 行号
     }
 }
+
+# django-pure-pagination 分页设置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 4, # 分页条当前页前后应该显示的总页数（两边均匀分布，因此要设置为偶数），
+    'MARGIN_PAGES_DISPLAYED': 2, # 分页条开头和结尾显示的页数
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True, # 当请求了不存在页，显示第一页
+}
+
+# django haystack 搜索引擎设置
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'blog_app.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

@@ -23,7 +23,10 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')), # Django JET URLS
     path('admin/', admin.site.urls),
     path('users/', include(('users.urls', 'users'), namespace='users')),
-    path('', include(('learning_logs.urls', 'learning_logs'), namespace='learning_logs')),
+    path('learning/', include(('learning_logs.urls', 'learning_logs'), namespace='learning_logs')),
     path('mdeditor/', include(('mdeditor.urls', 'mdeditor'), namespace='mdeditor')),
+    path('', include('blog_app.urls', 'blog_app')), 
+    path('', include('comments.urls')),
+    path('search/', include('haystack.urls')),
 
 ]

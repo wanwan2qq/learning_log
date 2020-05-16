@@ -1,14 +1,16 @@
-{% extends 'learning_logs/base.html' %}
+{% extends "base.html" %}
 
 {% block header %}
-    <h4><a href="{% url 'learning_logs:topics' %}">返回主题</a></h4>
+<div class="page-header">
+    <h4 class="cl-effect-11"><a href="{% url 'learning_logs:topics' %}">返回主题</a></h4>
     <h2>{{ topic }}</h2>
+</div>
 {% endblock header %}
 
 {% block content %}
 
     <p>
-        <a href="{% url 'learning_logs:new_entry' topic.id %}">增加日志</a>
+        <h5  class="cl-effect-11"><a href="{% url 'learning_logs:new_entry' topic.id %}">增加日志</a></h5>
     </p>
     
     {% for entry in entries %}

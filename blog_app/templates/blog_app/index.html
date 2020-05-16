@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load blog_extras %}
+
+{% block main %}
+    {% for post in post_list %}
+    <article class="post post-{{ post.pk }}">
+        <header class="entry-header">
+            <h1 class="entry-title">
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="{% url 'blog_app:category' post.category.pk post.author.id %}">{{ post.category }}</a></span>
+                <span class="post-date"><a href="{% url 'blog_app:archive_day' post.created_time.year post.created_time.month post.created_time.day post.author.id %}"><time class="entry-date"
+                                                            datetime="{{ post.created_time}}">{{ post.created_time }}</time></a></span>
+                <span class="post-author"><a href="{% url 'blog_app:author' post.author.pk %}">{{ post.author }}</a></span>
+                <span class="comments-link"><a href="{{ post.get_absolute_url }}#comment-area">{{ post.comment_set.count }} 评论</a></span>
+                <span class="views-count"><a href="{{ post.get_absolute_url }}">{{ post.views }} 阅读</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            <p>{{ post.excerpt }}</p>
+            <div class="read-more cl-effect-14">
+                <a href="{{ post.get_absolute_url }}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+            </div>
+        </div>
+    </article>
+    {% empty %}
+    <div class="no-post">暂时还没有发布的文章！</div>
+    {% endfor %}
+
+    {% if is_paginated %}
+        {{ page_obj.render }}
+    {% endif %}
+    
+{% endblock main %}
+
+{% block aside %}
+<aside class="col-md-4">
+    
+    <div class="widget">
+        <form role="search" method="get" id="searchform" class="bd-search" action="{% url 'haystack_search' %}">
+            <input type="search" name="q" placeholder="搜索博客" required>
+            <button type="submit"><span class="ion-ios-search-strong"></span></button>
+        </form>
+    </div>
+
+    <div class="widget">
+        <a href="{% url 'blog_app:new_post' %}">
+            <button type="button" class="btn btn-primary btn-lg">
+                <span class="ion-ios-book"></span> 写文章</button>
+        </a>
+    </div> 
+
+    {% show_hot_posts %}
+
+</aside>
+{% endblock aside %}

@@ -1,14 +1,16 @@
-{% extends "learning_logs/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 <!--前端渲染Markdown格式-->
 {% block header %}
+<div class="page-header">
     <link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
     <link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet"> 
 
-    <h2><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
+    <h2 class="cl-effect-11"><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
     <h4>记录时间 {{ time }}
-        <small><a href="{% url 'learning_logs:edit_entry' entry_id %}">修改</a></small>
+        <small class="cl-effect-11"><a href="{% url 'learning_logs:edit_entry' entry_id %}">修改</a></small>
     </h4>
+</div>
 {% endblock header %}
 
 {% block content %}

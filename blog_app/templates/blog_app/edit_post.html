@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+<div class="page-header">
+    <h2>编辑 {{ post.title }}</h2>
+    <h4 class="cl-effect-11"><a href="{% url 'blog_app:my_blog' %}">返回我的博客</a></h4>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <form action="{% url 'blog_app:edit_post' post.pk %}" method="post" class="form-group">
+        {% csrf_token %}
+
+        {% if flag %}
+            {{ form.media }}
+            {{ form.as_p }}
+        {% else %}
+            {% bootstrap_form form %}
+        {% endif %}
+
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+        {% endbuttons %}
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load comments_extras %}
+{% load blog_extras %}
+
+{% block main %}
+    <article class="post post-{{ post.pk }}">
+        <header class="entry-header">
+            <h1 class="entry-title">{{ post.title }}</h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="{% url 'blog_app:category' post.category.pk post.author.id %}">{{ post.category.name }}</a></span>
+                <span class="post-date"><a href="{% url 'blog_app:archive_day' post.created_time.year post.created_time.month post.created_time.day post.author.id %}"><time class="entry-date"
+                                                            datetime="{{ post.created_time}}">{{ post.created_time }}</time></a></span>
+                <span class="post-author"><a href="{% url 'blog_app:author' post.author.pk %}">{{ post.author }}</a></span>
+                <span class="comments-link"><a href="#comment-area">{{ post.comment_set.count }} 评论</a></span>
+                <span class="views-count"><a href="#">{{ post.views }} 阅读</a></span>
+                {% if post.author.pk == request.user.pk %}
+                    <span class="post-edit"><a href="{% url 'blog_app:edit_post' post.pk %}"> 编辑 </a></span>
+                {% endif %}
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            {{ post.body|safe }}
+        </div>
+    </article>
+    <section class="comment-area" id="comment-area">
+        <hr>
+        <h3>发表评论</h3>
+        {% show_comment_form post %}
+        <div class="comment-list-panel">
+            {% show_comments post %}
+        </div>
+    </section>
+{% endblock main %}
+
+{% block aside %}
+<aside class="col-md-4">
+
+    <div class="widget">
+        <form role="search" method="get" id="searchform" class="bd-search" action="{% url 'haystack_search' %}">
+            <input type="search" name="q" placeholder="搜索博客" required>
+            <button type="submit"><span class="ion-ios-search-strong"></span></button>
+        </form>
+    </div>
+
+    <div class="widget">
+        <a href="{% url 'blog_app:new_post' %}">
+            <button type="button" class="btn btn-primary btn-lg">
+                <span class="ion-ios-book"></span> 写文章</button>
+        </a>
+    </div> 
+    
+    {% if post.toc %}
+    <div class="widget widget-content">
+        <h3 class="widget-title">文章目录</h3>
+            <ul>
+                {{ post.toc|safe }}
+            </ul>
+    </div>
+    {% endif %}
+    
+    {% show_recent_posts post.author %}
+    {% show_archives post.author %}
+    {% show_categories post.author %}
+    {% show_tags post.author %}
+    <!-- RSS订阅
+    <div class="rss">
+        <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+    </div>
+    -->
+</aside>
+{% endblock aside %}
+

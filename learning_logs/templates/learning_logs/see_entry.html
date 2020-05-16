@@ -1,8 +1,10 @@
-{% extends "learning_logs/base.html" %}
+{% extends "base.html" %}
 <!--后台渲染Markdown格式，有些格式异常，暂时停用-->
 {% block header %}
-    <h2><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
+<div class="page-header">
+    <h2 class="cl-effect-11"><a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a></h2>
     <h4>记录时间 {{ time }}</h4>
+</div>
 {% endblock header %}
 
 {% block content %}

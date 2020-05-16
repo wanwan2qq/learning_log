@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+<div class="page-header">
+    <h2>发布文章</h2>
+    <h4 class="cl-effect-11"><a href="{% url 'blog_app:my_blog' %}">返回我的博客</a></h4>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <form action="{% url 'blog_app:new_post' %}" method="post" class="form-group">
+        {% csrf_token %}
+
+        {% if flag %}
+            {{ form.media }}
+            {{ form.as_p }}
+        {% else %}
+            {% bootstrap_form form %}
+        {% endif %}
+
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+            <a href="{% url 'blog_app:new_cate' %}">
+                <button type="button" class="btn btn-secondary">增加分类</button>
+            </a>
+            <a href="{% url 'blog_app:new_tag' %}">
+                <button type="button" class="btn btn-secondary">增加标签</button>
+            </a>
+        {% endbuttons %}
+        
+    </form>
+    <p id="tips">（新增分类和标签后，文章内容会丢失，请提前拷贝一份。）</p>
+
+{% endblock content %}
