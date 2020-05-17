@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from blog_app.models import Post
 from .forms import CommentForm
@@ -8,6 +9,7 @@ from .forms import CommentForm
 # Create your views here.
 
 @require_POST
+@login_required
 def comment(request, post_pk):
     # 先获取被评论的文章，因为后面需要把评论和被评论的文章关联起来。
     # 这里我们使用了 django 提供的一个快捷函数 get_object_or_404，
@@ -26,6 +28,10 @@ def comment(request, post_pk):
 
         # 将评论和被评论的文章关联起来。
         comment.post = post
+
+        # 自动填充评论的用户信息
+        comment.name = request.user
+        comment.email = request.user.email
 
         # 最终将评论数据保存进数据库，调用模型实例的 save 方法
         comment.save()

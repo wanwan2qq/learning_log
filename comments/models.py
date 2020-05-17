@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Comment(models.Model):
     name = models.CharField('名字', max_length=50)
-    email = models.EmailField('邮箱')
+    email = models.EmailField('邮箱', blank=True)
     url = models.URLField('网址', blank=True)
     text = models.TextField('内容')
     created_time = models.DateTimeField('创建时间', default=timezone.now)
