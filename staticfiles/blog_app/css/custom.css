@@ -18,6 +18,8 @@
  * 11.0 - Media Query
  * 12.0 - Comment
  * 13.0 - Pagination
+ * 14.0 - 全文搜关键词高亮
+ * 15.0 - 代码高亮并增加行号
  */
 
 /**
@@ -166,12 +168,14 @@ img {
     border-bottom: 0;
 }
 
+/*
 .navbar-toggle {
     margin: 0;
     border: 0;
     padding: 0;
     margin-right: 25px;
 }
+*/
 
 .navbar-toggle span {
     font-size: 2em;
@@ -909,4 +913,44 @@ img {
 
 .current a {
     color: red;
+}
+
+/**
+ * 14.0 - 全文搜关键词高亮
+ */
+span.highlighted {
+    color: red;
+}
+
+/**
+ * 15.0 - 全文搜关键词高亮
+ */
+ .codehilite {
+    padding: 0;
+}
+
+/* for block of numbers */
+.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.hljs-ln-n {
+    width: 30px;
+}
+
+/* for block of code */
+.hljs-ln .hljs-ln-code {
+    padding-left: 10px;
+    white-space: pre;
 }
