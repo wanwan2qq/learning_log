@@ -28,5 +28,6 @@ urlpatterns = [
     path('', include('blog_app.urls', 'blog_app')), 
     path('', include('comments.urls')),
     path('search/', include('haystack.urls')),
+    path('todo/', include('todo.urls')),
 
 ]

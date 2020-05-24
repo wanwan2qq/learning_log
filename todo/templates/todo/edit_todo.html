@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+<div class="page-header">
+    <h2>{{ todo.todo }}</h2>
+    <h4 class="cl-effect-11"><a href="{% url 'todo:my_todo' %}">返回</a></h4>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <form action="{% url 'todo:edit_todo' todo.pk %}" method="post" class="form-group">
+        {% csrf_token %}
+
+        
+        {% bootstrap_form form %}
+        
+
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+        {% endbuttons %}
+        
+    </form>
+
+{% endblock content %}

@@ -18,7 +18,13 @@
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{% static 'blog_app/css/pace.css' %}">
     <link rel="stylesheet" href="{% static 'blog_app/css/custom.css' %}">
+
+    <!--Markdown样式文件替换
     <link href="https://cdn.bootcss.com/highlight.js/9.15.8/styles/github.min.css" rel="stylesheet">
+    -->
+
+    <link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
+    <link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet"> 
 
     <!-- 自定义js/icon/pace-进度条 -->
     <script src="{% static 'blog_app/js/pace.min.js' %}"></script>
@@ -54,7 +60,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'blog_app:index' %}">首页</a></li>
                     <li><a href="{% url 'blog_app:my_blog' %}">博客</a></li>
-                    <li><a href="#">任务</a></li>
+                    <li><a href="{% url 'todo:todo_index' %}">任务</a></li>
                     <li><a href="{% url 'learning_logs:index' %}">日志</a></li>
                 </ul>
 
@@ -102,7 +108,7 @@
         </div>
     </div>
     
-    <!--代码高亮并增加行号-->
+    <!--代码高亮并增加行号
     <script src="{% static 'blog_app/js/script.js' %}"></script>
     <script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
     <script src="https://cdn.bootcss.com/highlightjs-line-numbers.js/2.7.0/highlightjs-line-numbers.min.js"></script>
@@ -110,6 +116,7 @@
         hljs.initHighlightingOnLoad();
         hljs.initLineNumbersOnLoad();
     </script>
+    -->
 
 </body>
 

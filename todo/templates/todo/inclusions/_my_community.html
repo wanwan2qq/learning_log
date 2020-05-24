@@ -1,0 +1,12 @@
+<div class="col-md-8">
+    <h3>我的圈子</h3>
+    <ul>
+        {% for community in my_community %}
+            <li>
+                <a href="{{ post.get_absolute_url }}">{{ community }}</a>
+            </li>
+        {% empty %}
+            暂无圈子
+        {% endfor %}
+    </ul>
+</div>

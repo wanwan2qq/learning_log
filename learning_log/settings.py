@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     # My apps
     'learning_logs',
     'users',
-    'blog_app.apps.BlogAppConfig',
+    'todo.apps.TodoConfig',
+    'blog_app.apps.BlogAppConfig',  # 在apps下设置了中文名字
     'comments.apps.CommentsConfig',
 
 ]

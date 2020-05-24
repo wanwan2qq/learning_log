@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load todo_extras %}
+
+
+
+{% block header %}
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>{{ community }}
+                    <!-- Single button -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            切换圈子 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for community in communities %}
+                            <li><a href="{% url 'todo:community' community.pk %}">{{ community }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </h3>
+
+                <p></p>
+                <h5>
+                    成员：
+                    {% for member in members %}
+                        {% if member.last_name or member.first_name %}
+                            {{ member.last_name }}{{ member.first_name }}
+                        {% else %}
+                            {{ member.username }}
+                        {% endif %}
+                    {% endfor %}
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <div style="float: right;">
+                    <a href="{% url 'todo:new_todo' %}">
+                        <button type="button" class="btn btn-primary">
+                            <span class="ion-ios-paper"></span> 新任务</button>
+                    </a>
+                    <a href="{% url 'todo:my_todo' %}">
+                        <button type="button" class="btn btn-default">
+                            <span class="ion-ios-nutrition"></span> 我的任务</button>
+                    </a>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="row">
+{% for member in members %}
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% if member.last_name or member.first_name %}
+                    {{ member.last_name }}{{ member.first_name }}
+                {% else %}
+                    {{ member.username }}
+                {% endif %}
+            </div>
+            <div class="panel-body pre-scrollable" style="height:240px">
+                <p class="small">今日任务：</p>
+                <ul style="margin-left:-20px;">
+                    {% for todo in today_todos %}
+                        {% if todo.owner == member %}
+                        <li>
+                            <a>
+                                {% if todo.status %}
+                                    完成
+                                {% else %}
+                                    待办
+                                {% endif %} -
+                            </a>
+                            <a>{{ todo.priority }}: </a> 
+                            <a>{{ todo.todo }}</a>
+                        </li>
+                        {% endif %}
+                    {% empty %}
+                        暂无任务
+                    {% endfor %}
+
+                </ul>
+                <p class="small">往期任务：</p>
+                <ul style="margin-left:-20px;">
+                    {% for todo in previous_todos %}
+                        {% if todo.owner == member %}
+                        <li>
+                            <a>
+                                {% if todo.status %}
+                                    完成
+                                {% else %}
+                                    待办
+                                {% endif %} -
+                            </a>
+                            <a>{{ todo.priority }}: </a> 
+                            <a>{{ todo.todo }}</a>
+                        </li>
+                        {% endif %}
+                    {% empty %}
+                        暂无任务
+                    {% endfor %}
+                </ul>
+
+            </div>
+            
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock content %}
+

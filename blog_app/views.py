@@ -83,7 +83,7 @@ class AuthorView(IndexView):
 class PostDetailView(DetailView):
 
     model = Post
-    template_name = 'blog_app/detail.html'
+    template_name = 'blog_app/detail_front.html'
     context_object_name = 'post'
 
     def get(self, request, *args, **kwargs):
@@ -100,6 +100,7 @@ class PostDetailView(DetailView):
         # 视图必须返回一个 HttpResponse 对象
         return response
 
+    """
     def get_object(self, queryset=None):
         # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
         post = super().get_object(queryset=None)
@@ -114,6 +115,7 @@ class PostDetailView(DetailView):
         post.toc = m.group(1) if m is not None else ''
 
         return post
+    """
 
 def search(request):
     # 首先我们使用 request.GET.get('q') 获取到用户提交的搜索关键词
@@ -152,6 +154,8 @@ def new_post(request):
             new_post = form.save(commit=False)
             new_post.author = request.user
             new_post.save()
+            # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
+            form.save_m2m()
             return HttpResponseRedirect(reverse('blog_app:my_blog'))
 
     context = {'form': form, 'flag': flag}

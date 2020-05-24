@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load todo_extras %}
+
+
+
+{% block header %}
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>
+                    {% if request.user.last_name or request.user.first_name %}
+                        {{ request.user.last_name }}{{ request.user.first_name }}
+                    {% else %}
+                        {{ request.user.username }}
+                    {% endif %}
+                </h3>
+                <p></p>
+                <h5>
+                    我的圈子：
+                    {% for community in communities %}
+                        <a href="{% url 'todo:community' community.pk %}">{{ community }}</a>
+                    {% empty %}
+                        还未加入任何圈子
+                    {% endfor %}
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <div style="float: right;">
+                    <a href="{% url 'todo:new_todo' %}">
+                        <button type="button" class="btn btn-primary">
+                            <span class="ion-ios-paper"></span> 新任务</button>
+                    </a>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                待办任务
+            </div>
+            <div class="panel-body">
+                {% for todo in todos %}
+                <div class="list-group col-md-4">
+                    {% if todo.priority.id == 3 %}
+                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-danger pre-scrollable"  style="height:180px">
+                    {% elif todo.priority.id == 2 %}
+                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-warning pre-scrollable"  style="height:180px">
+                    {% elif todo.priority.id == 1 %}
+                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-success pre-scrollable"  style="height:180px">
+                    {% endif %}
+                        <h4 class="list-group-item-heading">{{ todo.todo }}</h4>
+                        <p><samll>
+                            {{ todo.priority }}
+                            {{ todo.last_modified_time }}
+                        </samll></p>
+                        <p class="list-group-item-text">{{ todo.text }}</p>
+                    </a>
+                </div>
+                {% empty %}
+                    暂无任务
+                {% endfor %}
+            </div>  
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                已完成任务
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    {% for todo in finish_todos %}
+                        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item">
+                            [{{ todo.priority }}]
+                            {{ todo.todo }}
+                            <span class="badge">{{ todo.last_modified_time }}</span>
+                        </a>
+                    {% empty %}
+                        暂无任务
+                    {% endfor %}
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
