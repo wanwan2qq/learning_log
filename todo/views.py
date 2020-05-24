@@ -13,11 +13,18 @@ from .forms import TodoForm
 def todo_index(request):
     """圈子里的任务"""
     member = User.objects.get(id=request.user.id)
-    communities = member.member.all()
+    communities = member.member.all()  # 第二个member是community模型User字段的一个别名
     community = member.member.first()
-    members = community.member.all()
-    today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
-    previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+    try:
+        members = community.member.all()
+        today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
+        previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+    except AttributeError:
+        members = []
+        today_todos = []
+        previous_todos = []
+
+
 
     context = {
         'today_todos': today_todos, 

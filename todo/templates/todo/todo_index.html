@@ -7,6 +7,7 @@
 <div class="jumbotron">
     <div class="container">
         <div class="row">
+        {% if community %}
             <div class="col-md-8">
                 <h3>{{ community }}
                     <!-- Single button -->
@@ -46,6 +47,9 @@
                     </a>
                 </div> 
             </div>
+        {% else %}
+            <h3>还未加入任何圈子</h3>
+        {% endif %}
         </div>
     </div>
 </div>
