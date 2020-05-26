@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.contrib import messages
 
 # Create your views here.
 from .models import Todo, Community, Priority
@@ -76,7 +77,12 @@ def new_todo(request):
             new_todo.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             form.save_m2m()
-            return HttpResponseRedirect(reverse('todo:todo_index'))
+
+            messages.add_message(request, messages.SUCCESS, '任务添加成功！', extra_tags='success')
+            if 'submit_back' in request.POST:
+                return HttpResponseRedirect(reverse('todo:todo_index'))
+            elif 'submit_add' in request.POST:
+                return HttpResponseRedirect(reverse('todo:new_todo'))
 
     context = {'form': form}
     return render(request, 'todo/new_todo.html', context)
@@ -104,7 +110,11 @@ def edit_todo(request, todo_pk):
             form.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             # form.save_m2m()
-            return HttpResponseRedirect(reverse('todo:my_todo'))
+            messages.add_message(request, messages.SUCCESS, '任务修改成功！', extra_tags='success')
+            if 'submit_back' in request.POST:
+                return HttpResponseRedirect(reverse('todo:todo_index'))
+            elif 'submit_add' in request.POST:
+                return HttpResponseRedirect(reverse('todo:new_todo'))
 
     context = {'form': form, 'todo': todo}
     return render(request, 'todo/edit_todo.html', context)
