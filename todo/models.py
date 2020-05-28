@@ -50,7 +50,7 @@ class Todo(models.Model):
     """待办任务模型"""
 
     todo = models.CharField('待办任务', max_length=100)
-    text = MDTextField('备注')
+    text = MDTextField('备注', blank=True)
     
     owner = models.ForeignKey(User, verbose_name='主人', on_delete=models.CASCADE)
     community = models.ManyToManyField(Community, verbose_name='圈子', blank=True)
