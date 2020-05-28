@@ -1,4 +1,4 @@
-{% load bootstrap3 %}
+{% load static %}
 
 <!DOCTPYE html>
 <html lang='en'>
@@ -9,8 +9,10 @@
 
         <title>学习日志</title>
 
-        {% bootstrap_css %}
-        {% bootstrap_javascript %}
+        <!-- 使用本地的bootstrap样式 -->
+        <link rel="stylesheet" href="{% static 'blog_app/css/bootstrap.min.css' %}">
+        <script src="{% static 'blog_app/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'blog_app/js/jquery-2.1.3.min.js' %}"></script>
 
         <!--百度统计-->
         <script>
