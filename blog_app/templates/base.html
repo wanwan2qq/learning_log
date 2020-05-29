@@ -29,9 +29,26 @@
     
     <script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
     -->
-
     <link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
     <link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet"> 
+
+    <!-- 日期控件样式 -->
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#id_start_time, #id_finish_time").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                clearBtn: true,//清除按钮
+                todayBtn: "linked",//今日按钮
+                todayHighlight: true,//今日高亮
+                format: "yyyy-mm-dd"//日期格式，详见 http://bootstrap-datepicker.readthedocs.org/en/release/options.html#format
+            });
+        });
+    </script>
 
     <!-- 自定义js/icon/pace-进度条 -->
     <script src="{% static 'blog_app/js/pace.min.js' %}"></script>

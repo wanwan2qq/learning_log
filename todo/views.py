@@ -40,10 +40,13 @@ def community(request, community_pk):
     """圈子里的任务"""
     member = User.objects.get(id=request.user.id)
     communities = member.member.all()
-    community = member.member.get(pk=community_pk)
-    members = community.member.all()
-    today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
-    previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+    try:
+        community = member.member.get(pk=community_pk) # 从当前用户的圈子中找到指定的圈子
+        members = community.member.all()
+        today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
+        previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+    except:
+        raise Http404 
 
     context = {
         'today_todos': today_todos, 
@@ -92,6 +95,9 @@ def edit_todo(request, todo_pk):
     """发布任务"""
 
     todo = Todo.objects.get(id=todo_pk)
+
+    # 修改的任务不属于登录用户时，禁止访问
+    check_todo_owner(request, todo)
     
     # 判断客户端是移动端还是PC端
     # flag = check_agents_mobile_or_pc(request)
@@ -111,10 +117,7 @@ def edit_todo(request, todo_pk):
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             # form.save_m2m()
             messages.add_message(request, messages.SUCCESS, '任务修改成功！', extra_tags='success')
-            if 'submit_back' in request.POST:
-                return HttpResponseRedirect(reverse('todo:todo_index'))
-            elif 'submit_add' in request.POST:
-                return HttpResponseRedirect(reverse('todo:new_todo'))
+            return HttpResponseRedirect(reverse('todo:my_todo'))
 
     context = {'form': form, 'todo': todo}
     return render(request, 'todo/edit_todo.html', context)
@@ -134,3 +137,8 @@ def my_todo(request):
         }
     return render(request, 'todo/my_todo.html', context)
     
+
+def check_todo_owner(request, todo):
+    """确认请求的主题属于当前用户"""
+    if todo.owner != request.user:
+        raise Http404 

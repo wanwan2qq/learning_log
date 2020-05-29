@@ -5,3 +5,4 @@ __pycache__
 uploads/
 whoosh_index
 .vscode/
+.DS_Store
