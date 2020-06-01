@@ -12,4 +12,7 @@ urlpatterns = [
     path('new_todo/', views.new_todo, name='new_todo'),
     path('my_todo/', views.my_todo, name='my_todo'),
     path('edit_todo/<int:todo_pk>', views.edit_todo, name='edit_todo'),
+    path('new_community/', views.new_community, name='new_community'),
+    path('edit_community/<int:community_pk>', views.edit_community, name='edit_community'),
+    path('exit_community/<int:community_pk>', views.exit_community, name='exit_community'),
 ]

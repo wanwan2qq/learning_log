@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block header %}
+<div class="page-header">
+    <h2>新建圈子</h2>
+    <h4 class="cl-effect-11"><a href="{% url 'todo:todo_index' %}">返回圈子</a></h4>
+</div>
+
+{% endblock header %}
+
+{% block content %}
+
+    <form action="{% url 'todo:new_community' %}" method="post" class="form-group">
+        {% csrf_token %}
+
+        
+        {% bootstrap_form form %}
+        
+        <p>
+            <mark>请按住“Control”(Windows)键或“Command”(Mac)键添加成员或删除成员，否则会丢失已添加的成员！</mark>
+        </p>
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+        {% endbuttons %}
+        
+    </form>
+
+{% endblock content %}

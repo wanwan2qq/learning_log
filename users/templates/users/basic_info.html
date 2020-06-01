@@ -1,0 +1,20 @@
+{% extends "learning_logs/base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+    <h2>基本信息</h2>
+{% endblock header %}
+
+{% block content %}
+
+    <form method="post" action="{% url 'users:basic_info' %}" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        {% buttons %}
+            <button name="submit" class="btn btn-primary">保存</button>
+            <a class="btn btn-default" href="{% url 'todo:todo_index' %}" role="button">取消</a>
+        {% endbuttons %}
+    </form>
+
+{% endblock content %}

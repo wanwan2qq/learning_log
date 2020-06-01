@@ -12,13 +12,29 @@
                 <h3>{{ community }}
                     <!-- Single button -->
                     <div class="btn-group">
-                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             切换圈子 <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
                             {% for community in communities %}
                             <li><a href="{% url 'todo:community' community.pk %}">{{ community }}</a></li>
                             {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <a href="{% url 'todo:new_community' %}">新建圈子</a>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% if community.owner == request.user %}
+                                <li><a href="{% url 'todo:edit_community' community.pk %}">修改圈子</a></li>
+                            {% endif %}
+                            <li><a href="#" data-toggle="modal" data-target="#myModal">退出圈子</a></li>
                         </ul>
                     </div>
                 </h3>
@@ -48,7 +64,27 @@
                 </div> 
             </div>
         {% else %}
-            <h3>还未加入任何圈子</h3>
+            <div class="col-md-8">
+                <h3>
+                    您还未加入任何圈子
+                    <a class="btn btn-link " href="{% url 'todo:new_community' %}" role="button">新建圈子</a>
+                </h3>
+                <p>您可以新建圈子，或联系圈主加入一个圈子~</p>
+                <p>加入圈子后，您可以与同伴一起做任务喔~！</p>
+            </div>
+            
+            <div class="col-md-4">
+                <div style="float: right;">
+                    <a href="{% url 'todo:new_todo' %}">
+                        <button type="button" class="btn btn-primary">
+                            <span class="ion-ios-paper"></span> 新任务</button>
+                    </a>
+                    <a href="{% url 'todo:my_todo' %}">
+                        <button type="button" class="btn btn-default">
+                            <span class="ion-ios-nutrition"></span> 我的任务</button>
+                    </a>
+                </div> 
+            </div>
         {% endif %}
         </div>
     </div>
@@ -157,6 +193,31 @@
     </div>
 {% endfor %}
 </div>
+
+<!-- Modal -->
+{% if community %}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">退出圈子</h4>
+            </div>
+
+            <div class="modal-body">
+                是否退出圈子：【{{ community.name }}】
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a class="btn btn-primary" href="{% url 'todo:exit_community' community.pk %}" role="button">确定</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock content %}
 

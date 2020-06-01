@@ -8,7 +8,7 @@ from django.contrib import messages
 
 # Create your views here.
 from .models import Todo, Community, Priority
-from .forms import TodoForm
+from .forms import TodoForm, CommunityForm
 
 @login_required
 def todo_index(request):
@@ -92,7 +92,7 @@ def new_todo(request):
 
 @login_required
 def edit_todo(request, todo_pk):
-    """发布任务"""
+    """修改任务"""
 
     todo = Todo.objects.get(id=todo_pk)
 
@@ -122,6 +122,7 @@ def edit_todo(request, todo_pk):
     context = {'form': form, 'todo': todo}
     return render(request, 'todo/edit_todo.html', context)
 
+@login_required
 def my_todo(request):
     """我的任务"""
 
@@ -136,9 +137,67 @@ def my_todo(request):
         'communities': communities,
         }
     return render(request, 'todo/my_todo.html', context)
-    
+
+@login_required
+def new_community(request):
+    """
+    新建圈子
+    """
+
+    if request.method != 'POST':
+        form = CommunityForm()
+    else:
+        form = CommunityForm(data=request.POST)
+        if form.is_valid():
+            new_community = form.save(commit=False)
+            new_community.owner = request.user
+            new_community.save()
+            form.save_m2m()
+            new_community.member.add(request.user)
+            
+            messages.add_message(request, messages.SUCCESS, '圈子新建成功！', extra_tags='success')
+            return HttpResponseRedirect(reverse('todo:todo_index'))
+
+    context = {'form': form}
+    return render(request, 'todo/new_community.html', context)
+
+@login_required
+def edit_community(request, community_pk):
+    """
+    修改圈子
+    """
+    community = Community.objects.get(pk=community_pk)
+
+    # 只有圈主可以修改圈子，非圈主返回404
+    check_community_owner(request, community)
+
+    if request.method != 'POST':
+        form = CommunityForm(instance=community)
+    else:
+        form = CommunityForm(instance=community, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('todo:todo_index'))
+
+    context = {'form': form, 'community': community}
+    return render(request, 'todo/edit_community.html', context)
+
+@login_required
+def exit_community(request, community_pk):
+    """
+    退出圈子
+    """
+    community = Community.objects.get(pk=community_pk)
+    community.member.remove(request.user)
+    return HttpResponseRedirect(reverse('todo:todo_index'))
+
 
 def check_todo_owner(request, todo):
-    """确认请求的主题属于当前用户"""
+    """确认任务属于当前用户"""
     if todo.owner != request.user:
+        raise Http404 
+
+def check_community_owner(request, community):
+    """确认圈子属于当前用户"""
+    if community.owner != request.user:
         raise Http404 
