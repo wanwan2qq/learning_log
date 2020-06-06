@@ -55,6 +55,8 @@ class Todo(models.Model):
     owner = models.ForeignKey(User, verbose_name='主人', on_delete=models.CASCADE)
     community = models.ManyToManyField(Community, verbose_name='圈子', blank=True)
 
+    is_week_todo = models.BooleanField('周重点')
+
     status = models.BooleanField('已完成')
     priority = models.ForeignKey(Priority, verbose_name='优先级', on_delete=models.CASCADE)
 
@@ -71,3 +73,16 @@ class Todo(models.Model):
     def __str__(self):
         return self.todo
 
+
+class InterestingSentences(models.Model):
+    """有趣的句子"""
+
+    sentence = models.TextField('有趣的句子')
+    auther = models.CharField('作者', max_length=100)
+
+    class Meta:
+        verbose_name = '有趣的句子'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.sentence + " —— " + self.auther

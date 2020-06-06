@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 
 # Create your views here.
-from .models import Todo, Community, Priority
+from .models import Todo, Community, Priority, InterestingSentences
 from .forms import TodoForm, CommunityForm
 
 @login_required
@@ -16,23 +16,29 @@ def todo_index(request):
     member = User.objects.get(id=request.user.id)
     communities = member.member.all()  # 第二个member是community模型User字段的一个别名
     community = member.member.first()
+    week = timezone.now().isocalendar()[1]
+    sentence = InterestingSentences.objects.order_by("?").first()
     try:
         members = community.member.all()
-        today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
-        previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+        today_todos = community.todo_set.filter(start_time__date=timezone.now().date())
+        previous_todos = community.todo_set.filter(start_time__date__lt=timezone.now().date()).filter(status=False)
+        week_todos = community.todo_set.filter(start_time__week=week).filter(is_week_todo=True)
     except AttributeError:
         members = []
         today_todos = []
         previous_todos = []
-
-
+        week_todos = []
 
     context = {
         'today_todos': today_todos, 
         'previous_todos': previous_todos, 
         'communities': communities,
         'community': community, 
-        'members': members}
+        'members': members,
+        'week_todos': week_todos,
+        'week': week,
+        'sentence': sentence,
+        }
     return render(request, 'todo/todo_index.html', context)
 
 @login_required
@@ -40,11 +46,14 @@ def community(request, community_pk):
     """圈子里的任务"""
     member = User.objects.get(id=request.user.id)
     communities = member.member.all()
+    week = timezone.now().isocalendar()[1]
+    sentence = InterestingSentences.objects.order_by("?").first()
     try:
         community = member.member.get(pk=community_pk) # 从当前用户的圈子中找到指定的圈子
         members = community.member.all()
-        today_todos = community.todo_set.filter(created_time__date=timezone.now().date())
-        previous_todos = community.todo_set.filter(created_time__date__lt=timezone.now().date()).filter(status=False)
+        today_todos = community.todo_set.filter(start_time__date=timezone.now().date())
+        previous_todos = community.todo_set.filter(start_time__date__lt=timezone.now().date()).filter(status=False)
+        week_todos = community.todo_set.filter(start_time__week=week).filter(is_week_todo=True)
     except:
         raise Http404 
 
@@ -53,7 +62,11 @@ def community(request, community_pk):
         'previous_todos': previous_todos, 
         'communities': communities,
         'community': community, 
-        'members': members}
+        'members': members,
+        'week_todos': week_todos,
+        'week': week,
+        'sentence': sentence,
+        }
     return render(request, 'todo/todo_index.html', context)
 
 
@@ -77,6 +90,13 @@ def new_todo(request):
         if form.is_valid(): 
             new_todo = form.save(commit=False)
             new_todo.owner = request.user
+            new_todo.save()
+            if not new_todo.start_time:
+                new_todo.start_time = new_todo.created_time
+            if new_todo.status and (not new_todo.finish_time):
+                new_todo.finish_time = new_todo.last_modified_time
+            elif not new_todo.status:
+                new_todo.finish_time = None
             new_todo.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             form.save_m2m()
@@ -113,7 +133,14 @@ def edit_todo(request, todo_pk):
         # POST提交的数据，对数据进行处理
         form = TodoForm(instance=todo, data=request.POST)
         if form.is_valid(): 
-            form.save()
+            edit_todo = form.save()
+            if not edit_todo.start_time:
+                edit_todo.start_time = edit_todo.created_time
+            if edit_todo.status and (not edit_todo.finish_time):
+                edit_todo.finish_time = edit_todo.last_modified_time
+            elif not edit_todo.status:
+                edit_todo.finish_time = None
+            edit_todo.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             # form.save_m2m()
             messages.add_message(request, messages.SUCCESS, '任务修改成功！', extra_tags='success')
