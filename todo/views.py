@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.contrib import messages
 
+from datetime import timedelta
+
 # Create your views here.
 from .models import Todo, Community, Priority, InterestingSentences
 from .forms import TodoForm, CommunityForm
@@ -17,6 +19,8 @@ def todo_index(request):
     communities = member.member.all()  # 第二个member是community模型User字段的一个别名
     community = member.member.first()
     week = timezone.now().isocalendar()[1]
+    now = timezone.now()
+    now_add_4 = timezone.now() + timedelta(hours=4)
     sentence = InterestingSentences.objects.order_by("?").first()
     try:
         members = community.member.all()
@@ -37,6 +41,8 @@ def todo_index(request):
         'members': members,
         'week_todos': week_todos,
         'week': week,
+        'now': now,
+        'now_add_4': now_add_4,
         'sentence': sentence,
         }
     return render(request, 'todo/todo_index.html', context)
@@ -47,6 +53,8 @@ def community(request, community_pk):
     member = User.objects.get(id=request.user.id)
     communities = member.member.all()
     week = timezone.now().isocalendar()[1]
+    now = timezone.now()
+    now_add_4 = timezone.now() + timedelta(hours=4)
     sentence = InterestingSentences.objects.order_by("?").first()
     try:
         community = member.member.get(pk=community_pk) # 从当前用户的圈子中找到指定的圈子
@@ -65,6 +73,8 @@ def community(request, community_pk):
         'members': members,
         'week_todos': week_todos,
         'week': week,
+        'now': now,
+        'now_add_4': now_add_4,
         'sentence': sentence,
         }
     return render(request, 'todo/todo_index.html', context)

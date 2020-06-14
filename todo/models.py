@@ -61,10 +61,11 @@ class Todo(models.Model):
     priority = models.ForeignKey(Priority, verbose_name='优先级', on_delete=models.CASCADE)
 
     start_time = models.DateTimeField('开始时间', blank=True, null=True)
-    finish_time =models.DateTimeField('完成时间', blank=True, null=True)
+    finish_time = models.DateTimeField('完成时间', blank=True, null=True)
+    due_time = models.DateTimeField('截止时间', blank=True, null=True)
 
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
-    last_modified_time =models.DateTimeField('修改时间', auto_now=True)
+    last_modified_time = models.DateTimeField('修改时间', auto_now=True)
 
     class Meta:
         verbose_name = '待办任务'

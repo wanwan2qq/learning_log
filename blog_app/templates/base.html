@@ -13,6 +13,7 @@
     <!-- 使用本地的bootstrap样式 -->
     <link rel="stylesheet" href="{% static 'blog_app/css/bootstrap.min.css' %}">
     <script src="{% static 'blog_app/js/jquery.min.js' %}"></script>
+    <script src="{% static 'datetimepicker/js/moment.js' %}"></script>
     <script src="{% static 'blog_app/js/bootstrap.min.js' %}"></script>
 
     <!-- 自定义css/icon/pace-进度条 -->
@@ -36,7 +37,12 @@
     <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
     <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
     <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    
 
+    <script src="{% static 'datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <link href="{% static 'datetimepicker/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet"> 
+
+    <!--
     <script type="text/javascript">
         $(function () {
             $("#id_start_time, #id_finish_time").datepicker({
@@ -46,6 +52,14 @@
                 todayBtn: "linked",//今日按钮
                 todayHighlight: true,//今日高亮
                 format: "yyyy-mm-dd"//日期格式，详见 http://bootstrap-datepicker.readthedocs.org/en/release/options.html#format
+            });
+        });
+    </script>
+    -->
+    <script type="text/javascript">
+        $(function () {
+            $('#id_start_time, #id_due_time').datetimepicker({
+                format: "YYYY-MM-DD H:mm:ss",
             });
         });
     </script>
@@ -147,7 +161,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--代码高亮并增加行号
     <script src="{% static 'blog_app/js/script.js' %}"></script>
     <script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>

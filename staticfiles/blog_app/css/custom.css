@@ -954,3 +954,8 @@ span.highlighted {
     padding-left: 10px;
     white-space: pre;
 }
+
+/* add by zpj 20200614 */
+.form-group {
+    position: relative
+}

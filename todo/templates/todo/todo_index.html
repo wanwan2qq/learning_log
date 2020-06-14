@@ -150,20 +150,35 @@
                                     {% if todo.is_week_todo %}
                                         重点 |
                                     {% endif %}
-                                {{ todo.priority }}: </strong></a> 
-                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}" aria-expanded="false" aria-controls="{{ todo.pk }}">{{ todo.todo }}</a>
+                                    {{ todo.priority }}: </strong>
+                                </a> 
+                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}" aria-expanded="false" aria-controls="{{ todo.pk }}">
+                                    {{ todo.todo }}
+                                    {% if now > todo.due_time %}
+                                        <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                    {% elif now_add_4 > todo.due_time %}
+                                        <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                    {% endif %}
+                                </a>
                                 <div id="{{ todo.pk }}" class="collapse">
                                     <div class="well">
                                         <p><small>开始于: 
                                             {% if todo.start_time %}
-                                                {{ todo.start_time | date:"D d M Y" }}
+                                                {{ todo.start_time | date:"Y-m-d H:i" }}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}
                                         </small></p>
-                                        <p><small>结束于: 
-                                            {% if todo.finish_time %}
-                                                {{ todo.finish_time | date:"D d M Y" }}
+                                        <p><small>截止时间: 
+                                            {% if todo.due_time %}
+                                                {{ todo.due_time | date:"Y-m-d H:i" }}
+                                                {% if now > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                                    <a class="text-danger">已过期</a>
+                                                {% elif now_add_4 > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                                    <a class="text-warning">快到期</a>
+                                                {% endif %}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}
@@ -192,20 +207,35 @@
                                     {% if todo.is_week_todo %}
                                         重点 |
                                     {% endif %}
-                                {{ todo.priority }}: </strong></a> 
-                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}" aria-expanded="false" aria-controls="{{ todo.pk }}">{{ todo.todo }}</a>
+                                    {{ todo.priority }}: </strong>
+                                </a> 
+                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}" aria-expanded="false" aria-controls="{{ todo.pk }}">
+                                    {{ todo.todo }}
+                                    {% if now > todo.due_time %}
+                                        <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                    {% elif now_add_4 > todo.due_time %}
+                                        <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                    {% endif %}
+                                </a>
                                 <div id="{{ todo.pk }}" class="collapse">
                                     <div class="well">
                                         <p><small>开始于: 
                                             {% if todo.start_time %}
-                                                {{ todo.start_time | date:"D d M Y" }}
+                                                {{ todo.start_time | date:"Y-m-d H:i" }}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}
                                         </small></p>
-                                        <p><small>结束于: 
-                                            {% if todo.finish_time %}
-                                                {{ todo.finish_time | date:"D d M Y" }}
+                                        <p><small>截止时间: 
+                                            {% if todo.due_time %}
+                                                {{ todo.due_time | date:"Y-m-d H:i" }}
+                                                {% if now > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                                    <a class="text-danger">已过期</a>
+                                                {% elif now_add_4 > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                                    <a class="text-warning">快到期</a>
+                                                {% endif %}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}
@@ -236,19 +266,33 @@
                                         重点 |
                                     {% endif %}
                                 {{ todo.priority }}: </strong></a> 
-                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}week_todos" aria-expanded="false" aria-controls="{{ todo.pk }}week_todos">{{ todo.todo }}</a>
+                                <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}week_todos" aria-expanded="false" aria-controls="{{ todo.pk }}week_todos">
+                                    {{ todo.todo }}
+                                    {% if now > todo.due_time %}
+                                        <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                    {% elif now_add_4 > todo.due_time %}
+                                        <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                    {% endif %}
+                                </a>
                                 <div id="{{ todo.pk }}week_todos" class="collapse">
                                     <div class="well">
                                         <p><small>开始于: 
                                             {% if todo.start_time %}
-                                                {{ todo.start_time | date:"D d M Y" }}
+                                                {{ todo.start_time | date:"Y-m-d H:i" }}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}
                                         </small></p>
-                                        <p><small>结束于: 
-                                            {% if todo.finish_time %}
-                                                {{ todo.finish_time | date:"D d M Y" }}
+                                        <p><small>截止时间: 
+                                            {% if todo.due_time %}
+                                                {{ todo.due_time | date:"Y-m-d H:i" }}
+                                                {% if now > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                                    <a class="text-danger">已过期</a>
+                                                {% elif now_add_4 > todo.due_time %}
+                                                    <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                                    <a class="text-warning">快到期</a>
+                                                {% endif %}
                                             {% else %}
                                                 『未填写』
                                             {% endif %}

@@ -8,7 +8,7 @@ from .models import Todo, Community
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ['todo', 'text', 'community', 'is_week_todo', 'priority', 'start_time', 'finish_time', 'status']
+        fields = ['todo', 'text', 'community', 'is_week_todo', 'priority', 'start_time', 'due_time', 'status']
         widgets = {
             'community': SelectMultiple(attrs={'class': "form-control"}),
             }
