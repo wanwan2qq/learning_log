@@ -43,33 +43,28 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
                 待办任务
             </div>
-            <div class="panel-body">
-                {% for todo in todos %}
-                <div class="list-group col-md-4">
-                    {% if todo.priority.id == 3 %}
-                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-danger pre-scrollable"  style="height:180px">
-                    {% elif todo.priority.id == 2 %}
-                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-warning pre-scrollable"  style="height:180px">
-                    {% elif todo.priority.id == 1 %}
-                    <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-success pre-scrollable"  style="height:180px">
-                    {% endif %}
-                        <h4 class="list-group-item-heading">{{ todo.todo }}</h4>
-                        <p><samll>
-                            {{ todo.priority }}
-                            {{ todo.last_modified_time }}
-                        </samll></p>
-                        <p class="list-group-item-text">{{ todo.text }}</p>
-                    </a>
-                </div>
-                {% empty %}
-                    暂无任务
-                {% endfor %}
-            </div>  
+            {% my_todo_list T_todos %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                跟进任务
+            </div>
+            {% my_todo_list F_todos %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                关注任务
+            </div>
+            {% my_todo_list follow_todos %}
         </div>
     </div>
 </div>

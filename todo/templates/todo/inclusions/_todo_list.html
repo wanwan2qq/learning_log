@@ -1,0 +1,64 @@
+<ul style="margin-left:-40px; list-style-type:none;">
+    {% for todo in todo_list %}
+        {% if todo.owner == member %}
+        <li>
+            {% if user in todo.follower.all %}
+                <a class="small text-warning" href="{% url 'todo:unfollow' todo.pk %}">
+                    <span class="glyphicon glyphicon-heart text-warning" aria-hidden="true"></span>
+                    已关注
+                </a>
+            {% else %}
+                <a class="small text-muted" href="{% url 'todo:follow' todo.pk %}">
+                    <span class="glyphicon glyphicon-heart-empty text-muted" aria-hidden="true"></span>
+                    关注
+                </a>
+            {% endif %}
+            <a class="small text-info"><strong>
+                {{ todo.get_process_status_display }} |
+                {% if todo.is_week_todo %}
+                    重点 |
+                {% endif %}
+                {{ todo.priority }}: </strong>
+            </a>
+            <a class="small" data-toggle="collapse" data-parent="#accordion" href="#{{ todo.pk }}" aria-expanded="false" aria-controls="{{ todo.pk }}">
+                {{ todo.todo }}
+                {% if now > todo.due_time %}
+                    <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                {% elif now_add_4 > todo.due_time %}
+                    <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                {% endif %}
+            </a>
+
+            <div id="{{ todo.pk }}" class="collapse">
+                <div class="well">
+                    <p><small>开始于: 
+                        {% if todo.start_time %}
+                            {{ todo.start_time | date:"Y-m-d H:i" }}
+                        {% else %}
+                            『未填写』
+                        {% endif %}
+                    </small></p>
+                    <p><small>截止时间: 
+                        {% if todo.due_time %}
+                            {{ todo.due_time | date:"Y-m-d H:i" }}
+                            {% if now > todo.due_time %}
+                                <span class="glyphicon glyphicon-info-sign text-danger" aria-hidden="true"></span>
+                                <a class="text-danger">已过期</a>
+                            {% elif now_add_4 > todo.due_time %}
+                                <span class="glyphicon glyphicon-time text-warning" aria-hidden="true"></span>
+                                <a class="text-warning">快到期</a>
+                            {% endif %}
+                        {% else %}
+                            『未填写』
+                        {% endif %}
+                    </small></p>
+                    <p><small>备注: {{ todo.text }}</small></p>
+                </div>
+            </div>
+        </li>
+        {% endif %}
+    {% empty %}
+        暂无任务
+    {% endfor %}
+
+</ul>

@@ -12,3 +12,17 @@ def show_my_community(context, user):
     return {
         'my_community': member.member.all(),
     }
+
+@register.inclusion_tag('todo/inclusions/_todo_list.html', takes_context=True)
+def todo_list(context, todo_list, member, user):
+    return {
+        'todo_list': todo_list,
+        'member': member,
+        'user': user,
+    }
+
+@register.inclusion_tag('todo/inclusions/_my_todo_list.html', takes_context=True)
+def my_todo_list(context, todo_list):
+    return {
+        'todo_list': todo_list,
+    }

@@ -1,0 +1,23 @@
+<div class="panel-body">
+    {% for todo in todo_list %}
+    <div class="list-group">
+        {% if todo.priority.id == 3 %}
+        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-danger pre-scrollable"  style="height:180px">
+        {% elif todo.priority.id == 2 %}
+        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-warning pre-scrollable"  style="height:180px">
+        {% elif todo.priority.id == 1 %}
+        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-success pre-scrollable"  style="height:180px">
+        {% endif %}
+            <h4 class="list-group-item-heading">{{ todo.todo }}</h4>
+            <p><samll>
+                {{ todo.owner.first_name }}
+                {{ todo.priority }}
+                {{ todo.last_modified_time | date:"SHORT_DATE_FORMAT" }}
+            </samll></p>
+            <p class="list-group-item-text">{{ todo.text }}</p>
+        </a>
+    </div>
+    {% empty %}
+        暂无任务
+    {% endfor %}
+</div>

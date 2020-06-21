@@ -49,14 +49,27 @@ class Priority(models.Model):
 class Todo(models.Model):
     """待办任务模型"""
 
+    PROCESS_STATUS = [
+        ('T', '待办'),
+        ('F', '跟进'),
+        ('C', '完成'),
+    ]
+
     todo = models.CharField('待办任务', max_length=100)
     text = MDTextField('备注', blank=True)
     
-    owner = models.ForeignKey(User, verbose_name='主人', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name = 'todo_owner', verbose_name='主人', on_delete=models.CASCADE)
     community = models.ManyToManyField(Community, verbose_name='圈子', blank=True)
+    follower = models.ManyToManyField(User, related_name = 'todo_follower', verbose_name='关注人', blank=True)
 
     is_week_todo = models.BooleanField('周重点')
 
+    process_status = models.CharField(
+        max_length=1,
+        choices=PROCESS_STATUS,
+        default='T',
+        verbose_name='状态'
+    )
     status = models.BooleanField('已完成')
     priority = models.ForeignKey(Priority, verbose_name='优先级', on_delete=models.CASCADE)
 
@@ -87,3 +100,42 @@ class InterestingSentences(models.Model):
 
     def __str__(self):
         return self.sentence + " —— " + self.auther
+
+class MeetingAgenda(models.Model):
+    """
+    会议议题
+    记录会议条例的议题，并进行跟踪与反馈
+    """
+    AGENDA_SATATUS = [
+        ('B', '新建'),
+        ('F', '跟进中'),
+        ('H', '暂缓'),
+        ('C', '关闭'),
+    ]
+
+    community = models.ForeignKey(Community, verbose_name='圈子', blank=True, on_delete=models.CASCADE)
+    proposed_user = models.ForeignKey(User, related_name = 'proposed_user', verbose_name='提议人', on_delete=models.CASCADE)
+    agenda = models.CharField('议题', max_length=100)
+    owner = models.ForeignKey(User, related_name = 'agenda_owner', verbose_name='负责人', on_delete=models.CASCADE)
+    action_plan = models.TextField('行动方案')
+    track_record = models.TextField('跟进记录', blank=True)
+    status = models.CharField(
+        max_length=1,
+        choices=AGENDA_SATATUS,
+        default='B',
+        verbose_name='状态'
+    )
+
+    proposed_date = models.DateField('提出时间')
+    deadline = models.DateField('时间节点', blank=True, null=True)
+
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_modified_time = models.DateTimeField('修改时间', auto_now=True)
+
+    class Meta:
+        verbose_name = '会议议题'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.agenda
+

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
-from django.urls import reverse
+from django.urls import reverse, resolve
 from django.contrib import messages
 
 from datetime import timedelta
@@ -25,7 +25,10 @@ def todo_index(request):
     try:
         members = community.member.all()
         today_todos = community.todo_set.filter(start_time__date=timezone.now().date())
-        previous_todos = community.todo_set.filter(start_time__date__lt=timezone.now().date()).filter(status=False)
+        follow_todos = community.todo_set.filter(
+            start_time__date__lt=timezone.now().date()).filter(status=False).filter(process_status='F')
+        previous_todos = community.todo_set.filter(
+            start_time__date__lt=timezone.now().date()).filter(status=False).filter(process_status='T')
         week_todos = community.todo_set.filter(start_time__week=week).filter(is_week_todo=True)
     except AttributeError:
         members = []
@@ -35,6 +38,7 @@ def todo_index(request):
 
     context = {
         'today_todos': today_todos, 
+        'follow_todos': follow_todos,
         'previous_todos': previous_todos, 
         'communities': communities,
         'community': community, 
@@ -103,10 +107,12 @@ def new_todo(request):
             new_todo.save()
             if not new_todo.start_time:
                 new_todo.start_time = new_todo.created_time
-            if new_todo.status and (not new_todo.finish_time):
+            if new_todo.process_status == 'C' and (not new_todo.finish_time):
                 new_todo.finish_time = new_todo.last_modified_time
-            elif not new_todo.status:
+                new_todo.status = True
+            elif not new_todo.process_status != 'C':
                 new_todo.finish_time = None
+                new_todo.status = False
             new_todo.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             form.save_m2m()
@@ -146,10 +152,12 @@ def edit_todo(request, todo_pk):
             edit_todo = form.save()
             if not edit_todo.start_time:
                 edit_todo.start_time = edit_todo.created_time
-            if edit_todo.status and (not edit_todo.finish_time):
+            if edit_todo.process_status == 'C' and (not edit_todo.finish_time):
                 edit_todo.finish_time = edit_todo.last_modified_time
-            elif not edit_todo.status:
+                edit_todo.status = True
+            elif not edit_todo.process_status != 'C':
                 edit_todo.finish_time = None
+                edit_todo.status = False
             edit_todo.save()
             # 模型中有多对多的字段时，需要对表单使用save_m2m()方法保存一下
             # form.save_m2m()
@@ -165,11 +173,15 @@ def my_todo(request):
 
     member = User.objects.get(id=request.user.id)
     communities = member.member.all()
-    todos = Todo.objects.filter(owner=member).filter(status=False).order_by('-priority', '-last_modified_time')
+    T_todos = Todo.objects.filter(owner=member).filter(status=False).filter(process_status='T').order_by('-priority', '-last_modified_time')
+    F_todos = Todo.objects.filter(owner=member).filter(status=False).filter(process_status='F').order_by('-priority', '-last_modified_time')
+    follow_todos = member.todo_follower.all().filter(status=False).order_by('-priority', '-last_modified_time')
     finish_todos = Todo.objects.filter(owner=member).filter(status=True).order_by('-last_modified_time')[:20]
 
     context = {
-        'todos': todos, 
+        'T_todos': T_todos, 
+        'F_todos': F_todos, 
+        'follow_todos': follow_todos,
         'finish_todos': finish_todos, 
         'communities': communities,
         }
@@ -227,6 +239,23 @@ def exit_community(request, community_pk):
     community = Community.objects.get(pk=community_pk)
     community.member.remove(request.user)
     return HttpResponseRedirect(reverse('todo:todo_index'))
+
+@login_required
+def follow(request, todo_pk):
+    """关注任务"""
+    todo = Todo.objects.get(pk=todo_pk)
+    todo.follower.add(request.user)
+    url = request.META["HTTP_REFERER"]
+    return HttpResponseRedirect(url)
+
+@login_required
+def unfollow(request, todo_pk):
+    """关注任务"""
+    todo = Todo.objects.get(pk=todo_pk)
+    todo.follower.remove(request.user)
+    url = request.META["HTTP_REFERER"]
+    return HttpResponseRedirect(url)
+
 
 
 def check_todo_owner(request, todo):
