@@ -104,6 +104,7 @@ def new_todo(request):
         if form.is_valid(): 
             new_todo = form.save(commit=False)
             new_todo.owner = request.user
+            new_todo.status = False
             new_todo.save()
             if not new_todo.start_time:
                 new_todo.start_time = new_todo.created_time
