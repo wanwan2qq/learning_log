@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load todo_extras %}
+
+
+
+{% block header %}
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>
+                    <a href="{% url 'todo:community' community.pk %}">
+                        {{ community.name }} 议题会
+                    </a>
+                </h3>
+                <p></p>
+                <h5>
+                    成员：
+                    {% for member in members %}
+                        {% if member.last_name or member.first_name %}
+                            {{ member.last_name }}{{ member.first_name }}
+                        {% else %}
+                            {{ member.username }}
+                        {% endif %}
+                    {% endfor %}
+                </h5>
+            </div>
+            <div class="col-md-4">
+                <div style="float: right;">
+                    <a href="{% url 'todo:new_meeting_agenda' community.pk %}">
+                        <button type="button" class="btn btn-primary">
+                            <span class="ion-ios-paper"></span> 新议题</button>
+                    </a>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <ul id="myTabs" class="nav nav-pills" role="tablist">
+                    <li role="presentation" style="float: right;">
+                        <a href="#C" aria-controls="C" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            关闭
+                        </a>
+                    </li>
+                    <li role="presentation" style="float: right;">
+                        <a href="#H" 
+                            aria-controls="H" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            暂缓
+                        </a>
+                    </li>
+                    <li role="presentation" style="float: right;" class="active">
+                        <a href="#F" 
+                            aria-controls="F" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            跟进中
+                        </a>
+                    </li>
+                    <li role="presentation" style="float: right;">
+                        <a href="#B" 
+                            aria-controls="B" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            新建
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div role="tabpanel"  class="tab-pane active" id="B" >
+                    {% meeting_agenda_list meeting_agenda community 'B' %}
+                </div>
+                <div role="tabpanel"  class="tab-pane active" id="F" >
+                    {% meeting_agenda_list meeting_agenda community 'F' %}
+                </div>
+                <div role="tabpanel"  class="tab-pane active" id="H" >
+                    {% meeting_agenda_list meeting_agenda community 'H' %}
+                </div>
+                <div role="tabpanel"  class="tab-pane active" id="C" >
+                    {% meeting_agenda_list meeting_agenda community 'C' %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#myTabs a[href="#C"]').tab('show')
+    $('#myTabs a[href="#H"]').tab('show')
+    $('#myTabs a[href="#B"]').tab('show')
+    $('#myTabs a[href="#F"]').tab('show')
+</script>
+
+{% endblock content %}
+

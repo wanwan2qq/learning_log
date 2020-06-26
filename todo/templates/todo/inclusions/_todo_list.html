@@ -5,12 +5,12 @@
             {% if user in todo.follower.all %}
                 <a class="small text-warning" href="{% url 'todo:unfollow' todo.pk %}">
                     <span class="glyphicon glyphicon-heart text-warning" aria-hidden="true"></span>
-                    已关注
+                    已关注({{ todo.follower.count }})
                 </a>
             {% else %}
                 <a class="small text-muted" href="{% url 'todo:follow' todo.pk %}">
                     <span class="glyphicon glyphicon-heart-empty text-muted" aria-hidden="true"></span>
-                    关注
+                    关注({{ todo.follower.count }})
                 </a>
             {% endif %}
             <a class="small text-info"><strong>
@@ -31,6 +31,7 @@
 
             <div id="{{ todo.pk }}" class="collapse">
                 <div class="well">
+                    <p><a class="small text-primary" href="{% url 'todo:see_todo' todo.pk %}">任务详情</a></p>
                     <p><small>开始于: 
                         {% if todo.start_time %}
                             {{ todo.start_time | date:"Y-m-d H:i" }}

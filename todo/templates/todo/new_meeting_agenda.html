@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+
+<style>
+    button.btn {
+        float:right;
+	    margin:5px;
+        position:relative;
+        top:-80px;
+        }
+</style>
+
+<div class="page-header">
+    <h3>{{ community.name }} <small>的新议题</small></h3>
+    <h4 class="cl-effect-11"><a href="{{ url }}">返回</a></h4>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <form method="post" class="form-group">
+        {% buttons %}
+            <button name='submit' class="btn btn-primary">保存</button>
+        {% endbuttons %} 
+
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        
+    </form>
+
+{% endblock content %}

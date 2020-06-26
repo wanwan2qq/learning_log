@@ -1,23 +1,35 @@
-<div class="panel-body">
+
+<table class="table table-striped table-hover">
+    <th>ID
+        <td>任务</td>
+        <td>备注</td>
+        <td>优先级</td>
+        <td>Owner</td>
+        <td>状态</td>
+        <td>周重点</td>
+        <td>截止时间</td>
+        <td>操作</td>
+    </th>
     {% for todo in todo_list %}
-    <div class="list-group">
-        {% if todo.priority.id == 3 %}
-        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-danger pre-scrollable"  style="height:180px">
-        {% elif todo.priority.id == 2 %}
-        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-warning pre-scrollable"  style="height:180px">
-        {% elif todo.priority.id == 1 %}
-        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item list-group-item-success pre-scrollable"  style="height:180px">
+    <tr onclick="window.location='{% url 'todo:see_todo' todo.pk %}';">
+        <td>{{ todo.pk }}</td>
+        <td>{{ todo.todo }}</td>
+        <td>{{ todo.text | slice:20 }}</td>
+        <td>{{ todo.priority }}</td>
+        <td>{{ todo.owner.first_name }}</td>
+        <td>{{ todo.get_process_status_display }}</td>
+        <td>
+            {% if todo.is_week_todo %}
+                重点
+            {% endif %}
+        </td>
+        <td>{{ todo.due_time | date:"y/m/d H:i"  }}</td>
+        {% if todo.owner == user %}
+            <td><a class="btn btn-primary btn-xs" href="{% url 'todo:edit_todo' todo.pk %}">修改</a></td>
+        {% else %}
+            <td><a class="btn btn-default btn-xs" href="{% url 'todo:see_todo' todo.pk %}">查看</a></td>
         {% endif %}
-            <h4 class="list-group-item-heading">{{ todo.todo }}</h4>
-            <p><samll>
-                {{ todo.owner.first_name }}
-                {{ todo.priority }}
-                {{ todo.last_modified_time | date:"SHORT_DATE_FORMAT" }}
-            </samll></p>
-            <p class="list-group-item-text">{{ todo.text }}</p>
-        </a>
-    </div>
-    {% empty %}
-        暂无任务
+    </tr>
+
     {% endfor %}
-</div>
+</table>

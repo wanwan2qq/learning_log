@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse, resolve
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, RedirectView, CreateView, UpdateView
 
 from datetime import timedelta
 
 # Create your views here.
-from .models import Todo, Community, Priority, InterestingSentences
-from .forms import TodoForm, CommunityForm
+from .models import Todo, Community, Priority, InterestingSentences, MeetingAgenda
+from .forms import TodoForm, CommunityForm, MeetingAgendaForm
 
 @login_required
 def todo_index(request):
@@ -168,6 +169,19 @@ def edit_todo(request, todo_pk):
     context = {'form': form, 'todo': todo}
     return render(request, 'todo/edit_todo.html', context)
 
+class TodoDetailView(DetailView):
+    """任务详情"""
+    model = Todo
+    template_name = 'todo/see_todo.html'
+    context_object_name = 'todo'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.extra_context = {'url': request.META["HTTP_REFERER"]}
+        except KeyError:
+            self.extra_context = {'url': ""}
+        return super().get(request, *args, **kwargs)
+
 @login_required
 def my_todo(request):
     """我的任务"""
@@ -258,7 +272,136 @@ def unfollow(request, todo_pk):
     return HttpResponseRedirect(url)
 
 
+class MeetingAgendaListView(ListView):
+    """议题列表"""
+    template_name = 'todo/meeting_agenda_list.html'
+    queryset = MeetingAgenda.objects.all()
+    # paginate_by = 10
+    context_object_name = 'meeting_agenda'
 
+    def get(self, request, *args, **kwargs):
+        try:
+            community = Community.objects.get(pk=kwargs['community_pk'])
+        except:
+            raise Http404 
+        members = community.member.all()
+        
+
+        # 确认当前用户是圈子成员
+        check_community_member(request, community)
+
+        self.extra_context = {
+            'community': community,
+            'members': members,
+            }
+        self.object_list = MeetingAgenda.objects.filter(community=community).order_by('-created_time')
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+class MeetingAgendaDetailView(DetailView):
+    """议题详情"""
+    model = MeetingAgenda
+    template_name = 'todo/meeting_agenda_detail.html'
+    context_object_name = 'agenda'
+    slug_field = 'community'
+    slug_url_kwarg = 'community_pk'
+    pk_url_kwarg = 'agenda_pk'
+    query_pk_and_slug = True
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.extra_context = {'url': request.META["HTTP_REFERER"]}
+        except KeyError:
+            self.extra_context = {'url': ""}
+        return super().get(request, *args, **kwargs)
+
+class MeetingAgendaCreateView(CreateView):
+    """新建议题"""
+    # initial = MeetingAgenda
+    template_name = 'todo/new_meeting_agenda.html'
+    form_class = MeetingAgendaForm
+
+    def get(self, request, *args, **kwargs):
+        """增加圈子和url变量"""
+        try:
+            community = Community.objects.get(pk=kwargs['community_pk'])
+        except:
+            raise Http404
+        try:
+            url = request.META["HTTP_REFERER"]
+        except KeyError:
+            url = ""
+
+        self.extra_context = {
+            'community': community,
+            'url': url,
+        }
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        重写post，form_valid增加新参数request, community
+        """
+        form = self.get_form()
+        self.success_url = reverse('todo:meeting_agenda_list', kwargs=kwargs)
+        try:
+            community = Community.objects.get(pk=kwargs['community_pk'])
+        except:
+            raise Http404
+
+        if form.is_valid():
+            return self.form_valid(form, request, community)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form, request, community):
+        """自动添加圈子、提议人、提议时间"""
+        self.object = form.save(commit=False)
+        self.object.community = community
+        self.object.proposed_date = timezone.now().date()
+        self.object.proposed_user = request.user
+        # 成功提示
+        messages.add_message(request, messages.SUCCESS, '新议题创建成功！', extra_tags='success')
+        return super().form_valid(form)
+
+class MeetingAgendaUpdateView(UpdateView):
+    """修改议题"""
+    model = MeetingAgenda
+    form_class = MeetingAgendaForm
+    template_name = 'todo/edit_meeting_agenda.html'
+    # success_url = '/todo'
+    context_object_name = 'agenda'
+    slug_field = 'community'
+    slug_url_kwarg = 'community_pk'
+    pk_url_kwarg = 'agenda_pk'
+    query_pk_and_slug = True
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.extra_context = {'url': request.META["HTTP_REFERER"]}
+        except KeyError:
+            self.extra_context = {'url': ""}
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        重写post，form_valid增加新参数request, community
+        """
+        form = self.get_form()
+        self.success_url = reverse('todo:meeting_agenda_list', kwargs={'community_pk': kwargs['community_pk']})
+
+        # 成功提示
+        messages.add_message(request, messages.SUCCESS, '议题修改成功！', extra_tags='success')
+        return super().post(request, *args, **kwargs)
+
+class TrackRecordUpdateView(MeetingAgendaUpdateView):
+    """修改议题的跟进记录"""
+
+    fields = ['track_record']
+    form_class = None
+
+
+# 辅助函数：1）确认任务所属；2）确认圈子所属
 def check_todo_owner(request, todo):
     """确认任务属于当前用户"""
     if todo.owner != request.user:
@@ -267,4 +410,9 @@ def check_todo_owner(request, todo):
 def check_community_owner(request, community):
     """确认圈子属于当前用户"""
     if community.owner != request.user:
+        raise Http404 
+
+def check_community_member(request, community):
+    """确认当前用户是圈子成员"""
+    if request.user not in community.member.all():
         raise Http404 

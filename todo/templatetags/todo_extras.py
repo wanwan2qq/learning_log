@@ -22,7 +22,16 @@ def todo_list(context, todo_list, member, user):
     }
 
 @register.inclusion_tag('todo/inclusions/_my_todo_list.html', takes_context=True)
-def my_todo_list(context, todo_list):
+def my_todo_list(context, todo_list, user):
     return {
         'todo_list': todo_list,
+        'user': user
+    }
+
+@register.inclusion_tag('todo/inclusions/_meeting_agenda_list.html', takes_context=True)
+def meeting_agenda_list(context, meeting_agenda, community, status=None):
+    return {
+        'meeting_agenda': meeting_agenda,
+        'status': status,
+        'community': community,
     }

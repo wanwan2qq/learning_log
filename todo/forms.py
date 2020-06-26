@@ -2,8 +2,9 @@ from django import forms
 from django.forms.widgets import DateTimeInput, SelectMultiple, Textarea, CheckboxSelectMultiple
 from django.contrib.admin.widgets import AdminDateWidget, ManyToManyRawIdWidget, FilteredSelectMultiple
 from django.contrib.auth.models import User
+from mdeditor.fields import MDTextFormField
 
-from .models import Todo, Community
+from .models import Todo, Community, MeetingAgenda
 
 class TodoForm(forms.ModelForm):
     class Meta:
@@ -24,3 +25,8 @@ class CommunityForm(forms.ModelForm):
         widgets = {
             'member': SelectMultiple,
             }
+
+class MeetingAgendaForm(forms.ModelForm):
+    class Meta:
+        model = MeetingAgenda
+        fields = ['agenda', 'owner', 'status', 'deadline', 'action_plan']

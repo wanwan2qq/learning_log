@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block header %}
+
+<style>
+    div.big {line-height:200%;}
+</style>
+
+<div class="page-header">
+    <div class="jumbotron">
+        <h3>{{ todo.todo }}</h3>
+        <div class="row big">
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">责任人: {{ todo.owner.first_name }}</a>
+                </br>
+                <a class="text-muted">状态: {{ todo.get_process_status_display }}</a> 
+                </br>
+            </div>
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">优先级: {{ todo.priority }}</a>
+                </br>
+                {% if todo.is_week_todo %}
+                    <a class="text-muted">周重点</a>
+                {% endif %}
+                </br>
+            </div>
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">开始: {{ todo.start_time | date:"y/m/d H:i" }}</a>
+                </br>
+                <a class="text-muted">截止: {{ todo.due_time | date:"y/m/d H:i"  }}</a>
+                </br>
+            </div>
+        </div>
+        </br>
+        <a class="btn btn-primary btn-xs" href="{{ url }}">返回</a>
+        {% if todo.owner == request.user %}
+            <a class="btn btn-default btn-xs" href="{% url 'todo:edit_todo' todo.pk %}">修改</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+
+    <h4 class="text-info">任务备注</h4>
+
+    <div id="content"><textarea>{{ todo.text }}</textarea></div>
+
+
+<!--Markdown前端渲染-->
+<script src="{% static 'mdeditor/js/jquery.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/raphael.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/underscore.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/sequence-diagram.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/flowchart.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/jquery.flowchart.min.js' %}"></script>
+<script>
+$(function () {
+    // js 解析markdown
+    editormd.markdownToHTML("content", {
+        //htmlDecode      : "style,script,iframe",  // you can filter tags decode
+        emoji           : true,
+        taskList        : true,
+        tex             : true,  // 默认不解析
+        flowChart       : true,  // 默认不解析
+        sequenceDiagram : true,  // 默认不解析
+    });
+
+    $(".reference-link").each(function (i,obj) {
+        console.log(obj)
+    })
+})
+
+</script>
+{% endblock content %}

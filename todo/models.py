@@ -117,8 +117,8 @@ class MeetingAgenda(models.Model):
     proposed_user = models.ForeignKey(User, related_name = 'proposed_user', verbose_name='提议人', on_delete=models.CASCADE)
     agenda = models.CharField('议题', max_length=100)
     owner = models.ForeignKey(User, related_name = 'agenda_owner', verbose_name='负责人', on_delete=models.CASCADE)
-    action_plan = models.TextField('行动方案')
-    track_record = models.TextField('跟进记录', blank=True)
+    action_plan = MDTextField('行动方案')
+    track_record = MDTextField('跟进记录', blank=True)
     status = models.CharField(
         max_length=1,
         choices=AGENDA_SATATUS,

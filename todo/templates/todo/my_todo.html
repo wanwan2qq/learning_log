@@ -43,55 +43,69 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                待办任务
-            </div>
-            {% my_todo_list T_todos %}
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                跟进任务
-            </div>
-            {% my_todo_list F_todos %}
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                关注任务
-            </div>
-            {% my_todo_list follow_todos %}
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                已完成任务
-            </div>
-            <div class="panel-body">
-                <div class="list-group">
-                    {% for todo in finish_todos %}
-                        <a href="{% url 'todo:edit_todo' todo.pk %}" class="list-group-item">
-                            [{{ todo.priority }}]
-                            {{ todo.todo }}
-                            <span class="badge">{{ todo.last_modified_time }}</span>
+                <ul id="myTabs" class="nav nav-pills" role="tablist">
+                    <li role="presentation" style="float: right;">
+                        <a href="#finish" aria-controls="finish" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            完成任务
                         </a>
-                    {% empty %}
-                        暂无任务
-                    {% endfor %}
+                    </li>
+                    <li role="presentation" style="float: right;">
+                        <a href="#follow" 
+                            aria-controls="follow" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            关注任务
+                        </a>
+                    </li>
+                    <li role="presentation" style="float: right;">
+                        <a href="#follow-up" 
+                            aria-controls="follow-up" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            跟进任务
+                        </a>
+                    </li>
+                    <li role="presentation" style="float: right;" class="active">
+                        <a href="#todo" 
+                            aria-controls="todo" 
+                            role="tab" data-toggle="tab" 
+                            style="padding: 5px 10px;font-size: 10px">
+                            待办任务
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <div role="tabpanel"  class="tab-pane active" id="todo" >
+                    {% my_todo_list T_todos request.user %}
                 </div>
-            </div>  
+                <div role="tabpanel"  class="tab-pane" id="follow-up" >
+                    {% my_todo_list F_todos request.user %}
+                </div>
+                <div role="tabpanel"  class="tab-pane" id="follow" >
+                    {% my_todo_list follow_todos request.user %}
+                </div>
+                <div role="tabpanel"  class="tab-pane" id="finish" >
+                    {% my_todo_list finish_todos request.user %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+<script>
+    $('#myTabs a[href="#follow-up"]').tab('show')
+    $('#myTabs a[href="#follow"]').tab('show')
+    $('#myTabs a[href="#finish"]').tab('show')
+    $('#myTabs a[href="#todo"]').tab('show')
+</script>
 
 {% endblock content %}
 

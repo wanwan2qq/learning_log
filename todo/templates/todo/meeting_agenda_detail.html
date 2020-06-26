@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block header %}
+
+<style>
+    div.big {line-height:200%;}
+</style>
+
+<div class="page-header">
+    <div class="jumbotron">
+        <h3>{{ agenda.agenda }}</h3>
+        <div class="row big">
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">责任人: {{ agenda.owner.first_name }}</a>
+                </br>
+                <a class="text-muted">状态: {{ agenda.get_status_display }}</a> 
+                </br>
+                <a class="text-muted">时间节点: {{ agenda.deadline | date:"y/m/d" }}</a>
+            </div>
+
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">提议人: {{ agenda.proposed_user.first_name }}</a>
+                </br>
+                <a class="text-muted">提议时间: {{ agenda.proposed_date | date:"y/m/d" }}</a>
+            </div>
+            <div class="col-md-4">
+                </br>
+                <a class="text-muted">创建时间: {{ agenda.created_time | date:"y/m/d H:i" }}</a>
+                </br>
+                <a class="text-muted">最后修改时间: {{ agenda.last_modified_time | date:"y/m/d H:i" }}</a>
+            </div>
+        </div>
+        </br>
+        <a class="btn btn-primary btn-xs" href="{{ url }}">返回</a>
+        {% if todo.owner == request.user %}
+            <a class="btn btn-default btn-xs" href="{% url 'todo:edit_todo' todo.pk %}">修改</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 text-info" style="border-right:2px solid #eeeeee;">
+            <h4>行动方案</h4>
+            <div id="content1"><textarea>{{ agenda.action_plan }}</textarea></div>
+        </div>
+
+        <div class="col-md-6 text-info">
+            <h4>跟进记录</h4>
+            <div id="content2"><textarea>{{ agenda.track_record }}</textarea></div>
+        </div>
+    </div>
+
+<!--Markdown前端渲染-->
+<script src="{% static 'mdeditor/js/jquery.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/marked.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/prettify.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/raphael.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/underscore.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/sequence-diagram.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/flowchart.min.js' %}"></script>
+<script src="{% static 'mdeditor/js/lib/jquery.flowchart.min.js' %}"></script>
+<script>
+$(function () {
+    // js 解析markdown
+    editormd.markdownToHTML("content1", {
+        //htmlDecode      : "style,script,iframe",  // you can filter tags decode
+        emoji           : true,
+        taskList        : true,
+        tex             : true,  // 默认不解析
+        flowChart       : true,  // 默认不解析
+        sequenceDiagram : true,  // 默认不解析
+    });
+    editormd.markdownToHTML("content2", {
+        //htmlDecode      : "style,script,iframe",  // you can filter tags decode
+        emoji           : true,
+        taskList        : true,
+        tex             : true,  // 默认不解析
+        flowChart       : true,  // 默认不解析
+        sequenceDiagram : true,  // 默认不解析
+    });
+
+    $(".reference-link").each(function (i,obj) {
+        console.log(obj)
+    })
+})
+
+</script>
+{% endblock content %}

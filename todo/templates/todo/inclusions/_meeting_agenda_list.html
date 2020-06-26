@@ -1,0 +1,73 @@
+<table class="table table-striped table-hover">
+    <th>ID
+        <td>议题</td>
+        <td>责任人</td>
+        <td>行动方案</td>
+        <td>跟进记录</td>
+        <td>状态</td>
+        <td>时间节点</td>
+        <td>提议人</td>
+        <td>提出时间</td>
+        <td>操作</td>
+    </th>
+    {% if status %}
+        {% for agenda in meeting_agenda %}
+            {% if agenda.status == status %}
+                <tr onclick="window.location='{% url 'todo:meeting_agenda_detail' community.pk agenda.pk %}';">
+                    <td>{{ agenda.pk }}</td>
+                    <td>{{ agenda.agenda }}</td>
+                    <td>{{ agenda.owner.first_name }}</td>
+                    <td>{{ agenda.action_plan | slice:20 }}</td>
+                    <td>{{ agenda.track_record | slice:20 }}</td>
+                    <td>{{ agenda.get_status_display }}</td>
+                    <td>{{ agenda.deadline | date:"Y/m/d"  }}</td>
+                    <td>{{ agenda.proposed_user.first_name }}</td>
+                    <td>{{ agenda.proposed_date | date:"Y/m/d"  }}</td>
+                    <td>
+                        <a class="btn btn-default btn-xs" href="{% url 'todo:edit_meeting_agenda' community.pk agenda.pk %}">修改</a>
+                        <a class="btn btn-primary btn-xs" href="{% url 'todo:edit_track_record' community.pk agenda.pk %}">跟进</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for agenda in meeting_agenda %}
+            <tr onclick="window.location='{% url 'todo:meeting_agenda_detail' community.pk agenda.pk %}';">
+                <td>{{ agenda.pk }}</td>
+                <td>{{ agenda.agenda }}</td>
+                <td>{{ agenda.owner.first_name }}</td>
+                <td>{{ agenda.action_plan | slice:20 }}</td>
+                <td>{{ agenda.track_record | slice:20 }}</td>
+                <td>{{ agenda.get_status_display }}</td>
+                <td>{{ agenda.deadline | date:"Y/m/d"  }}</td>
+                <td>{{ agenda.proposed_user.first_name }}</td>
+                <td>{{ agenda.proposed_date | date:"Y/m/d"  }}</td>
+                <td>
+                    <a class="btn btn-default btn-xs" href="{% url 'todo:edit_meeting_agenda' community.pk agenda.pk %}">修改</a>
+                    <a class="btn btn-primary btn-xs" href="{% url 'todo:edit_track_record' community.pk agenda.pk %}">跟进</a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+
+<!-- 翻页功能暂不实现
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+            </br>
+            </br>
+            <span class="page-current">
+                第{{ page_obj.number }}页，
+                共{{ page_obj.paginator.num_pages }}页。
+            </span>
+        </span>
+    </div>
+{% endif %}
+-->
