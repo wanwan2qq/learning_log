@@ -34,6 +34,7 @@ def todo_index(request):
     except AttributeError:
         members = []
         today_todos = []
+        follow_todos = []
         previous_todos = []
         week_todos = []
 
