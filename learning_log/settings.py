@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')6=0$revn(=qz1ail_1m9v-8qsi*e2n2*!5^8(y(jnfd!o6h9l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'todo.apps.TodoConfig',
     'blog_app.apps.BlogAppConfig',  # 在apps下设置了中文名字
     'comments.apps.CommentsConfig',
+    'impression.apps.ImpressionConfig',  # 印象模块
 
 ]
 

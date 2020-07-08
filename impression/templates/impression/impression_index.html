@@ -1,0 +1,22 @@
+{% extends 'impression_base.html' %}
+
+{% block header %}
+<div>
+    <p>{{ request.user }} 您好！</p>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div>
+    <p>我的圈子</p>
+
+    
+    {% if communities %}
+        {% for community in communities %}
+            <p>{{ community.name }}</p>
+        {% endfor %}
+    {% endif %}
+    
+</div>
+{% endblock content %}

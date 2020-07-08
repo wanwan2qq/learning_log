@@ -29,5 +29,6 @@ urlpatterns = [
     path('', include('comments.urls')),
     path('search/', include('haystack.urls')),
     path('todo/', include('todo.urls')),
+    path('impression/', include('impression.urls')),
 
 ]

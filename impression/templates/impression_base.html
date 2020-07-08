@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imperssion</title>
+
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 使用本地的bootstrap样式 -->
+    <link rel="stylesheet" href="{% static 'blog_app/css/bootstrap.min.css' %}">
+    <script src="{% static 'blog_app/js/jquery.min.js' %}"></script>
+    <script src="{% static 'datetimepicker/js/moment.js' %}"></script>
+    <script src="{% static 'blog_app/js/bootstrap.min.js' %}"></script>
+
+    <!-- 自定义css/icon/pace-进度条 -->
+    <!-- ionicons加载速度很慢
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    -->
+    <link rel="stylesheet" href="{% static 'blog_app/css/pace.css' %}">
+    <link rel="stylesheet" href="{% static 'blog_app/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'blog_app/css/ionicons.min.css' %}">
+
+
+    <!--Markdown样式文件替换
+    <link href="https://cdn.bootcss.com/highlight.js/9.15.8/styles/github.min.css" rel="stylesheet">
+    -->    
+    <script src="{% static 'mdeditor/js/editormd.min.js' %}"></script>
+
+    <link href="{% static 'mdeditor/css/editormd.min.css' %}" rel="stylesheet">
+    <link href="{% static 'mdeditor/css/editormd.preview.css' %}" rel="stylesheet"> 
+
+    <!-- 日期控件样式 -->
+    <link href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    
+
+    <script src="{% static 'datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <link href="{% static 'datetimepicker/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet"> 
+
+    <script type="text/javascript">
+        $(function () {
+            $('#id_start_time, #id_due_time').datetimepicker({
+                format: "YYYY-MM-DD H:mm:ss",
+            });
+        });
+    </script>
+
+    <!-- 自定义js/icon/pace-进度条 -->
+    <script src="{% static 'blog_app/js/pace.min.js' %}"></script>
+    <script src="{% static 'blog_app/js/modernizr.custom.js' %}"></script>
+
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?5dbdf44bf4b27201e985264d415acdd3";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+</head>
+
+<body>
+
+    <div class="content-body">
+        <div class="container">
+            <div>
+                {% block header %}{% endblock header %}
+            </div>
+            <div>
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
