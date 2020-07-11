@@ -1,0 +1,24 @@
+{% extends 'impression_base.html' %}
+
+{% block header %}
+<div>
+    <p>{{ impression_pick_list | first }}</p>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div>
+    <p>Pick明细</p>
+
+    
+    {% if impression_pick_list %}
+        {% for impression_pick in impression_pick_list %}
+            <p>{{ impression_pick.praise_user }} - {{ impression_pick.picks }}Picks - {{ impression_pick.remarks }} - {{ impression_pick.created_time | date:"y/m/d" }}</p>
+        {% endfor %}
+    {% endif %}
+    
+</div>
+
+
+{% endblock content %}

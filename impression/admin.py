@@ -10,8 +10,8 @@ class ImpressionAdmin(admin.ModelAdmin):
     fields = ['impression', 'preset']
 
 class GiveImpressionAdmin(admin.ModelAdmin):
-    list_display = ['impression', 'user', 'remarks', 'picks', 'created_time', 'last_modified_time']
-    fields = ['impression', 'user', 'remarks', 'picks']
+    list_display = ['impression', 'user', 'remarks', 'picks', 'praise_user', 'created_time', 'last_modified_time']
+    fields = ['impression', 'user', 'remarks', 'picks', 'praise_user']
 
 class PickCoinAdmin(admin.ModelAdmin):
     list_display = ['user', 'pick_coin_num']

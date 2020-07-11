@@ -1,0 +1,35 @@
+{% extends 'impression_base.html' %}
+
+{% block header %}
+<div>
+    <p>{{ request.user }} 您好！</p>
+    <p>Pick币余额{{ my_picks.pick_coin_num }}</p>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div>
+    <p>{{ user.first_name }}的印象</p>
+
+    
+    {% if member_impression %}
+        {% for impression in member_impression %}
+            <p><a href={% url 'impression:impression_pick_list' user.pk impression.impression__id %}>
+                {{ impression.impression__impression }} - {{ impression.picks__sum }}Picks
+            </a></p>
+        {% endfor %}
+    {% endif %}
+    
+</div>
+
+<div>
+    <p>添加新印象</p>
+    {% if impressions %}
+        {% for impression in impressions %}
+            <p>{{ impression }}</p>
+        {% endfor %}
+    {% endif %}
+    <p>+自定义</p>
+</div>
+{% endblock content %}

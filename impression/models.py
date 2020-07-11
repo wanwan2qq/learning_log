@@ -29,6 +29,7 @@ class GiveImpression(models.Model):
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     remarks = models.CharField('备注', max_length=100)
     picks = models.DecimalField('pick数', max_digits=6, decimal_places=0)
+    praise_user = models.ForeignKey(User,related_name='praise_user', verbose_name='点赞用户', on_delete=models.CASCADE)
     
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_modified_time = models.DateTimeField('修改时间', auto_now=True)
@@ -38,7 +39,7 @@ class GiveImpression(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return '%s %s %s %s' % (self.impression, self.user, self.remarks, self.picks)
+        return self.impression.impression
 
 
 class PickCoin(models.Model):

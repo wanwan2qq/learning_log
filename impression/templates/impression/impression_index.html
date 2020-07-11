@@ -14,7 +14,7 @@
     
     {% if communities %}
         {% for community in communities %}
-            <p>{{ community.name }}</p>
+            <p><a href={% url 'impression:my_impression' community.pk %}>{{ community.name }}</a></p>
         {% endfor %}
     {% endif %}
     
