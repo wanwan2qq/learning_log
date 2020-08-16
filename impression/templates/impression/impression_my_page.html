@@ -1,36 +1,62 @@
 {% extends 'impression_base.html' %}
 
 {% block header %}
-<div>
-    <p>{{ request.user }} 您好！</p>
-    <p>Pick币余额{{ my_picks.pick_coin_num }}</p>
+<div class='row'>
+    <div class='impression'>
+        <p>
+            <a class='line'></a>
+            {{ request.user }}
+            ， 您好！
+            <a class='pick_coin'>Pick币余额{{ my_picks.pick_coin_num }}</a>
+        </p>
+    </div>
 </div>
 {% endblock header %}
 
 
 {% block content %}
-<div>
-    <p>我的印象</p>
+<div class='row'>
+    <div class='impression'>
+        <p class='header'><a class='line'></a>我的印象</p>
 
-    
-    {% if my_impression %}
-        {% for impression in my_impression %}
-            <p><a href={% url 'impression:impression_pick_list' request.user.pk impression.impression__id %}>
-                {{ impression.impression__impression }} - {{ impression.picks__sum }}Picks
-            </a></p>
-        {% endfor %}
-    {% endif %}
-    
+        <div class='my_impression'>
+            
+            {% if my_impression %}
+                {% for impression in my_impression %}
+                <div class='my_impression_item'>
+                    <a href={% url 'impression:impression_pick_list' request.user.pk impression.impression__id %}>
+                        <p class='impression_item_impression'>{{ impression.impression__impression }}</p>
+                        <p class='impression_item_impression_picks'>{{ impression.picks__sum }}Picks</p>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+        </div>
+        
+    </div>
+
+
+    <div class='impression'>
+        <p class='header'><a class='line'></a>{{ community.name }}</p>
+
+        <div class='impression_members'>
+            {% if members_impression %}
+                {% for member in members_impression %}
+                    <div class='impression_member_item'>
+                        <a href={% url 'impression:member_impression' community.pk member.user %}>
+                            <span class='impression_member_item_info'>{{ member.impression__impression }}</span>
+                            · {{ member.user__first_name }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 
-<div>
-    <p>{{ community.name }}</p>
 
-    {% if members_impression %}
-        {% for member in members_impression %}
-            <p><a href={% url 'impression:member_impression' community.pk member.user %}>{{ member.impression__impression }} - {{ member.user__first_name }}</a></p>
-        {% endfor %}
-    {% endif %}
-</div>
+
 
 {% endblock content %}

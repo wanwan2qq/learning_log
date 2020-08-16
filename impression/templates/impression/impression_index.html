@@ -1,22 +1,30 @@
 {% extends 'impression_base.html' %}
 
 {% block header %}
-<div>
-    <p>{{ request.user }} 您好！</p>
+<div class='row'>
+    <div class='impression'>
+        <p>
+            <a class='line'></a>
+            {{ request.user }}
+            ， 您好！
+            <a class='logout' href="{% url 'users:logout' %}">退出登录</a>
+        </p>
+    </div>
 </div>
 {% endblock header %}
 
 
 {% block content %}
-<div>
-    <p>我的圈子</p>
+<div class='row'>
+    <div class='impression my_community'>
+    <p class='header'><a class='line'></a>我的圈子</p>
 
     
     {% if communities %}
         {% for community in communities %}
-            <p><a href={% url 'impression:my_impression' community.pk %}>{{ community.name }}</a></p>
+            <p class='community'><a href={% url 'impression:my_impression' community.pk %}>{{ community.name }}</a></p>
         {% endfor %}
     {% endif %}
-    
+    </div>
 </div>
 {% endblock content %}

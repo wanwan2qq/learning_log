@@ -1,0 +1,23 @@
+{% extends 'impression_base.html' %}
+
+
+{% block content %}
+    <div class='row'>
+        <div class='impression'>
+            <p class='header'><a class='line'></a>琼琼的新印象</p>
+
+            <form  method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                
+                <button name='submit' class="btn btn-primary">提交</button>
+
+                
+            </form>
+
+        </div>
+    </div>
+
+
+{% endblock content %}

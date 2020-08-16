@@ -115,6 +115,13 @@ class ImpressionPickListView(ListView):
         # month = self.kwargs.get('month')
         return super(ListView, self).get_queryset().filter(user=member).filter(impression=impression)
 
+class AddImpressionCreateView(CreateView):
+    """添加印象"""
+    template_name = 'impression/add_impression.html'
+    success_url = '/impression/impression_my_page.html'
+    model = GiveImpression
+    fields = ['impression','remarks','picks','user','praise_user']
+
 def check_community_member(request, community):
     """确认当前用户是圈子成员"""
     if request.user not in community.member.all():
