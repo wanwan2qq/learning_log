@@ -48,9 +48,16 @@ class ImpressionMyPageListView(ListView):
         impression_list = GiveImpression.objects.filter(user__in=members).values(
             'impression__id', 'impression__impression','user', 'user__username', 
             'user__first_name').annotate(Sum('picks')).order_by('-picks__sum', 'user')
-        my_picks = PickCoin.objects.get(user=self.request.user)
+        
         members_impression = []
-        impressions = Impression.objects.filter(preset=True)
+        try:
+            my_picks = PickCoin.objects.get(user=self.request.user)
+        except:
+            my_picks = {}
+        try:
+            impressions = Impression.objects.filter(preset=True)
+        except:
+            impressions = {}
 
         for member in members:
             m_impression = impression_list.filter(user=member.id).first()
@@ -132,7 +139,10 @@ class AddImpressionCreateView(CreateView):
             url = request.META["HTTP_REFERER"]
         except KeyError:
             url = ""
-        my_picks = PickCoin.objects.get(user=self.request.user)
+        try:
+            my_picks = PickCoin.objects.get(user=self.request.user)
+        except:
+            my_picks = {}
         member = User.objects.get(pk=kwargs['member_pk'])
         impression = Impression.objects.get(pk=kwargs['impression_pk'])
         
@@ -173,7 +183,13 @@ class AddImpressionCreateView(CreateView):
         self.object.praise_user = request.user
         
         #更新用户coin
-        pick_coin = PickCoin.objects.get(user=request.user)
+        try:
+            pick_coin = PickCoin.objects.get(user=request.user)
+        except:
+            # 失败提示
+            messages.add_message(request, messages.ERROR, '您没有Pick币', extra_tags='error')
+            return self.form_invalid(form)
+
         if pick_coin.pick_coin_num >= self.object.picks:
             pick_coin.pick_coin_num = pick_coin.pick_coin_num - self.object.picks
             pick_coin.save()
@@ -201,7 +217,10 @@ class NewImpressionCreateView(CreateView):
             url = request.META["HTTP_REFERER"]
         except KeyError:
             url = ""
-        my_picks = PickCoin.objects.get(user=self.request.user)
+        try:
+            my_picks = PickCoin.objects.get(user=self.request.user)
+        except:
+            my_picks = {}
         member = User.objects.get(pk=kwargs['member_pk'])
         
         self.extra_context = {
