@@ -41,10 +41,18 @@
         <div class='add_impression'>
             {% if impressions %}
                 {% for impression in impressions %}
-                    <div class='add_impression_item'>{{ impression }}</div>
+                    <div class='add_impression_item'>
+                        <a class='add_impression_item_text' href={% url 'impression:add_impression' community.pk user.pk impression.pk %}>
+                            {{ impression }}
+                        </a>
+                    </div>
                 {% endfor %}
             {% endif %}
-            <div class='add_impression_item'>+自定义</div>
+            <div class='add_impression_item'>
+                <a class='add_impression_item_text' href={% url 'impression:new_impression' community.pk user.pk %}>
+                    +自定义
+                </a>
+            </div>
         </div>
 
     </div>

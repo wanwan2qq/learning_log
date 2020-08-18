@@ -15,7 +15,7 @@
             <button name="submit" class="btn btn-primary">登录</button>
         {% endbuttons %}
         
-        <input type="hidden" name="next" value="{% url 'todo:todo_index' %}" />
+        <input type="hidden" name="next" value="{{ view.get_success_url }}" />
     </form>
 
 {% endblock content %}

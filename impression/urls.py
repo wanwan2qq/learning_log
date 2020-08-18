@@ -12,5 +12,6 @@ urlpatterns = [
     path('my_impression/<int:community_pk>', views.ImpressionMyPageListView.as_view(), name='my_impression'),
     path('member_impression/<int:community_pk>/<int:member_pk>', views.ImpressionMemberPageListView.as_view(), name='member_impression'),
     path('impression_pick_list/<int:member_pk>/<int:impression_pk>', views.ImpressionPickListView.as_view(), name='impression_pick_list'),
-    path('add_impression/<int:member_pk>/<int:impression_pk>', views.AddImpressionCreateView.as_view(), name='add_impression')
+    path('add_impression/<int:community_pk>/<int:member_pk>/<int:impression_pk>', views.AddImpressionCreateView.as_view(), name='add_impression'),
+    path('new_impression/<int:community_pk>/<int:member_pk>', views.NewImpressionCreateView.as_view(), name='new_impression'),
 ]

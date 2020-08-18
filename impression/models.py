@@ -46,8 +46,9 @@ class PickCoin(models.Model):
     """
     个人Pick币数量
     """
-    user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name='用户', on_delete=models.CASCADE)
     pick_coin_num = models.DecimalField('pick币', max_digits=6, decimal_places=0)
+    key_user = models.BooleanField('组长', default=False)
 
     class Meta:
         verbose_name = 'Pick币数量'
@@ -56,17 +57,4 @@ class PickCoin(models.Model):
     def __str__(self):
         return '%s %s' % (self.user, self.pick_coin_num)
 
-class KeyUser(models.Model):
-    user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
-    enable = models.BooleanField('启用', default=True)
-
-    created_time = models.DateTimeField('创建时间', auto_now_add=True)
-    last_modified_time = models.DateTimeField('修改时间', auto_now=True)
-
-    class Meta:
-        verbose_name = '关键用户'
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.user.username
 

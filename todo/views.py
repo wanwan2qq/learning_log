@@ -66,13 +66,17 @@ def community(request, community_pk):
         community = member.member.get(pk=community_pk) # 从当前用户的圈子中找到指定的圈子
         members = community.member.all()
         today_todos = community.todo_set.filter(start_time__date=timezone.now().date())
-        previous_todos = community.todo_set.filter(start_time__date__lt=timezone.now().date()).filter(status=False)
+        follow_todos = community.todo_set.filter(
+            start_time__date__lt=timezone.now().date()).filter(status=False).filter(process_status='F')
+        previous_todos = community.todo_set.filter(
+            start_time__date__lt=timezone.now().date()).filter(status=False).filter(process_status='T')
         week_todos = community.todo_set.filter(start_time__week=week).filter(is_week_todo=True)
     except:
         raise Http404 
 
     context = {
         'today_todos': today_todos, 
+        'follow_todos': follow_todos,
         'previous_todos': previous_todos, 
         'communities': communities,
         'community': community, 

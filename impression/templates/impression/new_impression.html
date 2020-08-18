@@ -4,7 +4,7 @@
 <div class='row'>
     <div class='impression'>
         <p>
-            <a class='line'></a>{{ member.first_name }}的新印象
+            <a class='line'></a>新印象
             <a class='pick_coin'>Pick币余额{{ my_picks.pick_coin_num }}</a>
         </p>
     </div>
@@ -16,19 +16,24 @@
         <div class='impression'>
             
             <p class='header'>
-                <a class='line'></a>新印象 {{ impression.impression }}
+                <a class='line'></a>添加自定义新印象
             </p>
 
             <div class='form_add_impression'>
+            {% if form.errors %}
+                <p>错误信息：{{ form.errors }}</p>
+            {% else %}
                 <form  method="post">
 
                     {% csrf_token %}
                     {{ form.as_p }}
                     
-                    <button name='submit' class="btn btn-primary">提交</button>
+                    <button name='submit' >下一步</button>
 
                 </form>
+            {% endif %}
             </div>
+
         </div>
     </div>
 

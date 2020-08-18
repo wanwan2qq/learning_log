@@ -24,6 +24,10 @@
         {% for community in communities %}
             <p class='community'><a href={% url 'impression:my_impression' community.pk %}>{{ community.name }}</a></p>
         {% endfor %}
+    {% else %}
+        <p class='community'>
+            <a>请联系圈主加入圈子~</a>
+        </p>
     {% endif %}
     </div>
 </div>
